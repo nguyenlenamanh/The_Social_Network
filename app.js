@@ -3,6 +3,7 @@ var app = express();
 var indexController = require('./controllers/index.controllers.js');
 var realtimeControllers = require('./controllers/realtime.controllers.js');
 var loginController = require('./controllers/login.controllers');
+var timeLineController = require('./controllers/timeLine.Controller');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
@@ -41,6 +42,7 @@ io.on('connection',function(socket) {
 
     socket.on('register',function(data) {
         jwt.verify(data,'secretkey',(err,data) => {
+            console.log('---data test---');
             console.log(data);
 
             socket.userID = data.user.userID;
@@ -279,4 +281,16 @@ app.get('/login',function(req,res) {
 })
 app.post('/login',function(req,res) {
     loginController.loginPost(req,res);
+})
+
+//=======================================================================Viet
+app.get('/timeLine',function (req,res) {
+    timeLineController.timeLine(req,res)
+})
+
+app.post('/timeLine',function (req,res) {
+    timeLineController.post(req,res)
+})
+app.get('/timeLinePhoto',function (req,res) {
+    timeLineController.photo(req,res)
 })

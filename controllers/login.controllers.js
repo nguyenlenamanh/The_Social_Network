@@ -10,6 +10,8 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 
+//Lỗi ko đăng nhập được
+//nguyenlenamanh.2016@outlook.com - 123456
 module.exports.login = function(req,res) {
     res.render('login');
 }

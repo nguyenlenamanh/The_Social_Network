@@ -232,7 +232,7 @@
 				<li>
 					<a href="#" title="">timeline</a>
 					<ul>
-						<li><a href="time-line.html" title="">timeline</a></li>
+						<li><a href="timeLine" title="">timeline</a></li>
 						<li><a href="timeline-friends.html" title="">timeline friends</a></li>
 						<li><a href="timeline-groups.html" title="">timeline groups</a></li>
 						<li><a href="timeline-pages.html" title="">timeline pages</a></li>
@@ -280,11 +280,11 @@
 				<li><a href="newsfeed.html" title="Home" data-ripple=""><i class="ti-home"></i></a></li>
 				<li>
 					<a href="#" title="Notification" data-ripple="">
-						<i class="ti-bell"></i><span>20</span>
+						<i class="ti-bell"></i><span id="CountNoti">0</span>
 					</a>
-					<div class="dropdowns">
+					<div class="dropdowns" style="width: 350px;">
 						<span>4 New Notifications</span>
-						<ul class="drops-menu">
+						<ul class="drops-menu" id="notiPanel">
 							<li>
 								<a href="notifications.html" title="">
 									<img src="images/resources/thumb-1.jpg" alt="">
@@ -555,6 +555,7 @@
 										</figure>
 										<div class="newpst-input">
 											<form method="post" action="/post" enctype="multipart/form-data" id="frmPostNew">
+												<div id="showInfo"></div>
 												<input type="hidden" value="123456" name="UserID">
 												<textarea rows="2" placeholder="write something" name="post_content"></textarea>
 												<div class="attachments">
@@ -568,7 +569,7 @@
 														<li>
 															<i class="fa fa-image"></i>
 															<label class="fileContainer">
-																<input type="file" name="picture">
+																<input type="file" id="imgInp" name="picture">
 															</label>
 														</li>
 														<li>
@@ -1077,5 +1078,24 @@
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8c55_YHLvDHGACkQscgbGLtLRdxBDCfI"></script>
 
 </body>	
+<script>
+	$("#imgInp").change(function() {
+		readURL(this);
+	});
+	function readURL(input) {
+		if (input.files && input.files[0]) {
+			var reader = new FileReader();
+			reader.onload = function(e) {
+				var img = document.createElement('img');
+				img.width = 200;
+				img.src = e.target.result;
+				var form = document.querySelector('#showInfo');
+				form.innerHTML = "";
+				form.appendChild(img);
+			}
+			reader.readAsDataURL(input.files[0]);
+		}
+	}
 
+</script>
 </html>

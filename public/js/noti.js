@@ -16,6 +16,8 @@ $(document).ready(function() {
         })
 
         socket.on('receive-noti',function(data) {
+            $("#CountNoti").text(parseInt($("#CountNoti").text())+1);
+            $("#notiPanel").prepend("<li><a href=\"notifications.html\" title=\"\"><img src=\"images/resources/thumb-1.jpg\" alt=\"\"><div class=\"mesg-meta\"><h6>sarah Loren</h6><span>" + data + "</span></div></a><span class=\"tag green\">New</span></li>")
             alert(data);
         })
     }
