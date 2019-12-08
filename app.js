@@ -294,3 +294,11 @@ app.post('/timeLine',function (req,res) {
 app.get('/timeLinePhoto',function (req,res) {
     timeLineController.photo(req,res)
 })
+app.get('/timeLineFreinds',function (req,res) {
+    timeLineController.freind(req,res)
+})
+
+app.get('/timeLineAbout',function (req,res) {
+
+    timeLineController.about(req,res)
+})

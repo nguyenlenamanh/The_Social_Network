@@ -1,3 +1,4 @@
+
 var AWS = require("aws-sdk");
 var formidable = require("formidable");
 var fs = require("fs");
@@ -251,4 +252,69 @@ module.exports.photo = (req,res) => {
             });
         }
     })
+}
+
+module.exports.about = (req,res) => {
+    //console.log(req.UserID);
+    jwt.verify(req.cookies.token,'secretkey', async (err, data) => {
+        if (err) res.sendStatus(403);
+        else {
+            var user = await GetUserByID(data.user.userID);
+            console.log(user);
+            res.render("timeLineAbout", ({user: user}));
+        }
+    })
+}
+
+
+module.exports.freind = (req,res) => {
+    //console.log(req.UserID);
+    jwt.verify(req.cookies.token,'secretkey',(err,data) => {
+        if(err) res.sendStatus(403);
+        else {
+            var paramsUserFriends = {
+                TableName : "Users",
+                KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
+                ExpressionAttributeValues: {
+                    ":reid": "Friend_",
+                    ":userid": data.user.userID
+                }
+            };
+            docClient.query(paramsUserFriends, async function (err, data) {
+                if (err) {
+                    console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+                } else {
+                    let ls = [];
+                    for (var i = 0; i < data.Count; i++) {
+                        var t = await GetUserByID(data.Items[i].RefeID.split('_')[1]);
+                        ls.push(t);
+                    }
+                    console.log(JSON.stringify(ls,null,'\t'));
+                    // var post = shuffle(data.Items);
+                    res.render("timeLineFreinds", ({posts: ls}));
+                }
+            });
+        }
+    })
+}
+
+function GetUserByID (userID) {
+    return new Promise((resolve,reject) => {
+        var paramsUserInfo = {
+            TableName : "Users",
+            KeyConditionExpression: "UserID = :userid and RefeID = :reid",
+            ExpressionAttributeValues: {
+                ":reid": userID,
+                ":userid": userID
+            }
+        };
+
+        docClient.query(paramsUserInfo, function(err, data) {
+            if (err) {
+                return resolve(false);
+            } else {
+                return resolve(data.Items[0]);
+            }
+        });
+    });
 }

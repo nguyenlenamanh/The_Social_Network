@@ -569,13 +569,13 @@
 														<li>
 															<i class="fa fa-image"></i>
 															<label class="fileContainer">
-																<input type="file" id="imgInp" name="picture">
+																<input type="file" id="imgInp" onchange="changeUrl(this,1)" name="picture">
 															</label>
 														</li>
 														<li>
 															<i class="fa fa-video-camera"></i>
 															<label class="fileContainer">
-																<input type="file" name="video">
+																<input type="file" onchange="changeUrl(this,2)" name="video">
 															</label>
 														</li>
 														<li>
@@ -1079,23 +1079,31 @@
 
 </body>	
 <script>
-	$("#imgInp").change(function() {
-		readURL(this);
-	});
-	function readURL(input) {
+	function changeUrl(input,type) {
 		if (input.files && input.files[0]) {
 			var reader = new FileReader();
+			var form = document.querySelector('#showInfo');
+			form.innerHTML = "";
 			reader.onload = function(e) {
-				var img = document.createElement('img');
-				img.width = 200;
-				img.src = e.target.result;
-				var form = document.querySelector('#showInfo');
-				form.innerHTML = "";
-				form.appendChild(img);
+				if(type==1){
+					var img = document.createElement('img');
+					img.width = 200;
+					img.src = e.target.result;
+					form.appendChild(img);
+
+				}
+				else{
+					var video = document.createElement('video');
+					video.setAttribute("width","100%");
+					video.src = e.target.result;
+					video.load();
+					video.setAttribute("controls","controls")
+					form.appendChild(video);
+				}
+
 			}
 			reader.readAsDataURL(input.files[0]);
 		}
-	}
-
+	};
 </script>
 </html>
