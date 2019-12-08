@@ -13,6 +13,8 @@ AWS.config.update({
 
 var docClient = new AWS.DynamoDB.DocumentClient();
 // Function RandomID
+//Lỗi ko đăng nhập được
+//nguyenlenamanh.2016@outlook.com - 123456
 function RandomID(){
     return '_' + Math.random().toString(36).substr(2, 9);
 }

@@ -299,6 +299,5 @@ app.get('/timeLineFreinds',function (req,res) {
 })
 
 app.get('/timeLineAbout',function (req,res) {
-
     timeLineController.about(req,res)
 })
