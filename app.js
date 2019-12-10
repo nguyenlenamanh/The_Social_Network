@@ -28,7 +28,7 @@ app.set('views','./views');
 var docClient = new AWS.DynamoDB.DocumentClient();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-server.listen(3000);
+server.listen(3005);
 
 var connectedUsers = {};
 
@@ -274,8 +274,8 @@ app.post('/post',function(req,res) {
     indexController.Post(req,res);
 })
 app.post('/comment',function(req,res) {
-    indexController.Comments(req,res);
-})
+    realtimeControllers.Save(req,res);
+ })
 app.get('/login',function(req,res) {
     loginController.login(req,res);
 })
@@ -300,4 +300,11 @@ app.get('/timeLineFreinds',function (req,res) {
 
 app.get('/timeLineAbout',function (req,res) {
     timeLineController.about(req,res)
+})
+// =====9/12/2019=======
+app.post('/reply',function(req,res){
+    indexController.Reply(req,res);
+ })
+ app.post('/postAjax',function(req,res) {
+    indexController.PostAjax(req,res);
 })

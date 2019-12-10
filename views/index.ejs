@@ -556,36 +556,31 @@
 										<div class="newpst-input">
 											<form method="post" action="/post" enctype="multipart/form-data" id="frmPostNew">
 												<div id="showInfo"></div>
-												<input type="hidden" value="123456" name="UserID">
-												<textarea rows="2" placeholder="write something" name="post_content"></textarea>
+												<input type="hidden" value="123456" name="UserID" id="UserID">
+												<textarea rows="2" placeholder="write something" name="post_content" id="post_content"></textarea>
 												<div class="attachments">
 													<ul>
 														<li>
 															<i class="fa fa-music"></i>
 															<label class="fileContainer">
-																<input type="file" name="music">
+																<input type="file" name="music" id="music">
 															</label>
 														</li>
 														<li>
 															<i class="fa fa-image"></i>
 															<label class="fileContainer">
-																<input type="file" id="imgInp" onchange="changeUrl(this,1)" name="picture">
+																<input type="file"  onchange="changeUrl(this,1)" name="picture" id="picture">
 															</label>
 														</li>
 														<li>
 															<i class="fa fa-video-camera"></i>
 															<label class="fileContainer">
-																<input type="file" onchange="changeUrl(this,2)" name="video">
+																<input type="file" onchange="changeUrl(this,2)" name="video" id="video">
 															</label>
-														</li>
+														</li>														
 														<li>
-															<i class="fa fa-camera"></i>
-															<label class="fileContainer">
-																<input type="file" name="file_document">
-															</label>
-														</li>
-														<li>
-															<button type="submit">Post</button>
+																<button type="button" onclick="Post()">Post</button>
+															<!-- <button type="submit">Post</button> -->
 														</li>
 													</ul>
 												</div>
@@ -593,145 +588,165 @@
 										</div>
 									</div>
 								</div><!-- add post new box -->
-								<div class="loadMore">								
-									<%posts.forEach(function(post){%>
-										<div class="central-meta item">
-												<div class="user-post">
-													<div class="friend-info">
-														<figure>
-															<img src="images/resources/friend-avatar10.jpg" alt="">
-														</figure>
-														<div class="friend-name">
-															<ins><a href="time-line.html" title="">Janice Griffith</a></ins>
-															<span>published: <%=post.Info.PostTime%></span>
-														</div>
-														<div class="post-meta">
-															<%if(post.Info.Type == "Photo"){%>
-																<img src="<%=post.Info.URL%>" alt="">
-															<%}else if(post.Info.Type == "Video"){%>
-																<iframe src="<%=post.Info.URL%>" height="315" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe>
-															<%}else if(post.Info.Type == "Music"){%>
-																<audio controls>
-																		<source src="<%=post.Info.URL%>" type="audio/ogg">
-																		<source src="<%=post.Info.URL%>" type="audio/mpeg">
-																	  Your browser does not support the audio element.
-																</audio>
-															<%}%>
-															<div class="we-video-info">
-																<ul>
-																	
-																	<li>
-																		<span class="comment" data-toggle="tooltip" title="Comments">
-																			<i class="fa fa-comments-o"></i>
-																			<ins>52</ins>
-																		</span>
-																	</li>
-																	<li>
-																		<span id="<%=post.Info.By + ';' + post.RefeID%>" class="like" data-toggle="tooltip" title="like" data-id="">
-																			<i class="ti-heart"></i>
-																			<ins>2.2k</ins>
-																		</span>
-																	</li>
-																	
-																	<li class="social-media">
-																		<div class="menu">
-																		  <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
-																		  </div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
-																		  </div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
-																		  </div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
-																		  </div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
-																		  </div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
-																			</div>
-																		  </div>
-																			<div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
-																			</div>
-																		  </div>
-																		  <div class="rotater">
-																			<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
-																			</div>
-																		  </div>
-			
-																		</div>
-																	</li>
-																</ul>
+								<div class="loadMore" id="allPost">								
+										<%posts.forEach(function(post){%>
+											<div class="central-meta item">
+													<div class="user-post">
+														<div class="friend-info">
+															<figure>
+																<img src="images/resources/friend-avatar10.jpg" alt="">
+															</figure>
+															<div class="friend-name">
+																<ins><a href="time-line.html" title="">Janice Griffith</a></ins>
+																<span>published: <%=post.Info.PostTime%></span>
 															</div>
-															<div class="description">																
-																<p>
-																		<%=post.Info.Description%>
-																</p>
-															</div>
-														</div>
-													</div>
-													<div class="coment-area">
-														<ul class="we-comet" id="<%=post.RefeID%>">		
-																<%var length = post.Info.Comments.length %>												
-																<%for(var i = 0;i < length;i++){%>
-																	<li>
-																			<div class="comet-avatar">
-																				<img src="images/resources/comet-1.jpg" alt="">
-																			</div>
-																			<div class="we-comment">
-																				<div class="coment-head">
-																					<h5><a href="time-line.html" title="">Donald Trump</a></h5>
-																					<span><%=post.Info.Comments[i].PostDate%></span>
-																					<a class="we-reply" href="#" title="Reply" data-id="<%=post.Info.Comments[i].CommentID%>"><i class="fa fa-reply"></i></a>
-																				</div>
-																				<p><%=post.Info.Comments[i].Content%>
-																					<i class="em em-smiley"></i>
-																				</p>
-																			</div>
-																	</li>
-																<%}%>															
-															<li class="post-comment">
-																<div class="comet-avatar">
-																	<img src="images/resources/comet-1.jpg" alt="">
-																</div>
-																<div class="post-comt-box">
-																	<form method="post" action="/comment">
+															<div class="post-meta">
+																<%if(post.Info.Type == "Photo"){%>
+																	<img src="<%=post.Info.URL%>" alt="">
+																<%}else if(post.Info.Type == "Video"){%>
+																	<video width="100%"  controls>
+																		<source src="<%=post.Info.URL%>" type="video/mp4">
+																		<source src="<%=post.Info.URL%>" type="video/ogg">
+																		Your browser does not support the video tag.
+																	  </video>
+																	<!-- <iframe src="<%=post.Info.URL%>" height="315" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe> -->
+																<%}else if(post.Info.Type == "Music"){%>
+																	<audio controls>
+																			<source src="<%=post.Info.URL%>" type="audio/ogg">
+																			<source src="<%=post.Info.URL%>" type="audio/mpeg">
+																		  Your browser does not support the audio element.
+																	</audio>
+																<%}%>
+																<div class="we-video-info">
+																	<ul>
 																		
-																		<input type="hidden" value="User Name Test" name="userName" id="userName<%=post.RefeID%>">
-																		<input type="hidden" value="<%=post.Info.WhoCanSee[0]%>" name="UserIDOwner" id="UserIDOwner<%=post.RefeID%>">
-																		<input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">
-																		<textarea  placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>" style="width:90%;"></textarea>
-																		<div class="add-smiles" style="width:13%;">
-																			<span class="em em-expressionless" title="add icon"></span>
-																		</div>
-																		<div class="smiles-bunch">
-																			<i class="em em---1"></i>
-																			<i class="em em-smiley"></i>
-																			<i class="em em-anguished"></i>
-																			<i class="em em-laughing"></i>
-																			<i class="em em-angry"></i>
-																			<i class="em em-astonished"></i>
-																			<i class="em em-blush"></i>
-																			<i class="em em-disappointed"></i>
-																			<i class="em em-worried"></i>
-																			<i class="em em-kissing_heart"></i>
-																			<i class="em em-rage"></i>
-																			<i class="em em-stuck_out_tongue"></i>
-																		</div>
-																		<button type="button" value="Send" class="btn btn-primary submit_comment" data-id="<%=post.RefeID%>" style="bottom:inherit;background-color: blue;">Send</button>
-																	</form>	
+																		<li>
+																			<span class="comment" data-toggle="tooltip" title="Comments">
+																				<i class="fa fa-comments-o"></i>
+																				<ins>52</ins>
+																			</span>
+																		</li>
+																		<li>
+																			<span class="like" data-toggle="tooltip" title="like" data-id="">
+																				<i class="ti-heart"></i>
+																				<ins>2.2k</ins>
+																			</span>
+																		</li>
+																		
+																		<li class="social-media">
+																			<div class="menu">
+																			  <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
+																			  </div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
+																			  </div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
+																			  </div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
+																			  </div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
+																			  </div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
+																				</div>
+																			  </div>
+																				<div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
+																				</div>
+																			  </div>
+																			  <div class="rotater">
+																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
+																				</div>
+																			  </div>
+				
+																			</div>
+																		</li>
+																	</ul>
 																</div>
-															</li>
-														</ul>
+																<div class="description">																
+																	<p>
+																			<%=post.Info.Description%>
+																	</p>
+																</div>
+															</div>
+														</div>
+														<div class="coment-area">
+															<ul class="we-comet" id="<%=post.RefeID%>">		
+																	<%var length = post.Info.Comments.length %>												
+																	<%for(var i = 0;i < length;i++){%>
+																		<li id="<%=post.Info.Comments[i].CommentID%>">
+																				<div class="comet-avatar">
+																					<img src="images/resources/comet-1.jpg" alt="">
+																				</div>
+																				<div class="we-comment">
+																					<div class="coment-head">
+																						<h5><a href="time-line.html" title="" id="un_<%=post.RefeID%><%=post.Info.Comments[i].CommentID%>">Donald Trump</a></h5>
+																						<span><%=post.Info.Comments[i].PostDate%></span>
+																						<a class="we-reply" title="Reply" style="color: #088dcd;cursor: pointer;"><i class="fa fa-reply reply_comment" id="<%=post.RefeID%>;<%=post.Info.Comments[i].CommentID%>"></i></a>
+																					</div>
+																					<p><%=post.Info.Comments[i].Content%>
+																						<i class="em em-smiley"></i>
+																					</p>
+																				</div>
+																				<%if(post.Info.Comments[i].Comments.length > 0){%>
+																					<ul id="ul_<%=post.RefeID%>">
+																						<%var length2 = post.Info.Comments[i].Comments.length %>												
+																						<%for(var j = 0;j < length2;j++){%>
+																							<li id="CommentID__ozxsn8z8v">
+																								<div class="comet-avatar"><img src="images/resources/comet-1.jpg"></div>
+																								<div class="we-comment">
+																									<div class="coment-head">
+																										<h5><a href="time-line.html" id="un_<%=post.RefeID%><%=post.Info.Comments[i].Comments[j].CommentID%>"><%=post.Info.Comments[i].Comments[j].UserName%></a></h5><span><%=post.Info.Comments[i].Comments[j].PostDate%></span><a style="color: #088dcd;cursor: pointer;" class="we-reply" title="Reply"><i class="fa fa-reply reply_comment" id="NaN;CommentID__ozxsn8z8v"></i></a></div>
+																									<p><%=post.Info.Comments[i].Comments[j].Content%></p>
+																								</div>
+																							</li>
+																						<%}%>
+																					</ul>
+																				<%}%>
+																		</li>
+																	<%}%>															
+																<li class="post-comment">
+																	<div class="comet-avatar">
+																		<img src="images/resources/comet-1.jpg" alt="">
+																	</div>
+																	<div class="post-comt-box">
+																		<form method="post" action="/comment">
+																			
+																			<input type="hidden" value="User Name Test" name="userName" id="userName<%=post.RefeID%>">
+																			<input type="hidden" value="<%=post.Info.WhoCanSee[0]%>" name="UserIDOwner" id="UserIDOwner<%=post.RefeID%>">
+																			<input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">									
+																			<textarea  placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
+																			<div class="add-smiles">
+																				<span class="em em-expressionless" title="add icon"></span>
+																			</div>
+																			<div class="smiles-bunch">
+																				<i class="em em---1"></i>
+																				<i class="em em-smiley"></i>
+																				<i class="em em-anguished"></i>
+																				<i class="em em-laughing"></i>
+																				<i class="em em-angry"></i>
+																				<i class="em em-astonished"></i>
+																				<i class="em em-blush"></i>
+																				<i class="em em-disappointed"></i>
+																				<i class="em em-worried"></i>
+																				<i class="em em-kissing_heart"></i>
+																				<i class="em em-rage"></i>
+																				<i class="em em-stuck_out_tongue"></i>
+																			</div>
+																			<!-- <button class="post_comment" type="button" value="Send" class="btn btn-primary" data-id="<%=post.RefeID%>" style="bottom:inherit;background-color: blue;">Send</button> -->
+																		</form>	
+																	</div>
+																</li>
+															</ul>
+														</div>
 													</div>
-												</div>
-											</div> 
-									<%})%>
+												</div> 
+										<%})%>
 									<button class="btn-view btn-load-more">Load More</button>
 								</div>
 							</div><!-- centerl meta -->
@@ -1071,12 +1086,13 @@
 				</div>
 			</form>
 		</div><!-- side panel -->		
-	
+	<script src="axios.js"></script>
 	<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
 	<script src="js/script.js"></script>
 	<script src="js/map-init.js"></script>
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8c55_YHLvDHGACkQscgbGLtLRdxBDCfI"></script>
-
+	<div id="myFunction"><script src="js/myScript.js" id="handle"></script></div>
+	<script src="js/post.js" id="handle2"></script>
 </body>	
 <script>
 	function changeUrl(input,type) {

@@ -1,0 +1,125 @@
+<div class="central-meta item">
+    <div class="user-post">
+        <div class="friend-info">
+            <figure>
+                <img src="images/resources/friend-avatar10.jpg" alt="">
+            </figure>
+            <div class="friend-name">
+                <ins><a href="time-line.html" title="">Janice Griffith</a></ins>
+                <span>published: <%=new Date(post.Info.PostTime)%></span>
+            </div>
+            <div class="post-meta">
+                    <%if(post.Info.Type == "Music"){%>
+                        <audio controls="">
+                            <source src="<%=post.Info.URL%>" type="audio/ogg">
+                            <source src="<%=post.Info.URL%>" type="audio/mpeg">
+                          Your browser does not support the audio element.
+                    </audio>               
+                    <%}else if(post.Info.Type == "Photo"){%>
+                        <img src="<%=post.Info.URL%>" alt="">
+                    <%}else if(post.Info.Type == "Video"){%>
+                        <video width="100%"  controls>
+                            <source src="<%=post.Info.URL%>" type="video/mp4">
+                            <source src="<%=post.Info.URL%>" type="video/ogg">
+                            Your browser does not support the video tag.
+                          </video>
+                        <!-- <iframe src="<%=post.Info.URL%>" height="315" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe> -->
+                    <%}%>            
+                <div class="we-video-info">
+                    <ul>
+                        
+                        <li>
+                            <span class="comment" data-toggle="tooltip" title="" data-original-title="Comments">
+                                <i class="fa fa-comments-o"></i>
+                                <ins>52</ins>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="like" data-toggle="tooltip" title="" data-id="" data-original-title="like">
+                                <i class="ti-heart"></i>
+                                <ins>2.2k</ins>
+                            </span>
+                        </li>
+                        
+                        <li class="social-media">
+                            <div class="menu">
+                              <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
+                              </div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
+                              </div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
+                              </div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
+                              </div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
+                              </div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
+                                </div>
+                              </div>
+                                <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
+                                </div>
+                              </div>
+                              <div class="rotater">
+                                <div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
+                                </div>
+                              </div>
+
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="description">																
+                    <p>
+                            <%=post.Info.Description%>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="coment-area">
+            <ul class="we-comet" id="Post_iaug9tvbc">		
+                                                                    
+                                                                                
+                <li class="post-comment">
+                    <div class="comet-avatar">
+                        <img src="images/resources/comet-1.jpg" alt="">
+                    </div>
+                    <div class="post-comt-box">
+                        <form method="post" action="/comment">
+                            
+                            <input type="hidden" value="User Name Test" name="userName" id="userName<%=post.RefeID%>">
+                            <input type="hidden" value="<%=post.UserID%>" name="UserIDOwner" id="UserIDOwner<%=post.RefeID%>">
+                            <input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">									
+                            <textarea placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
+                            <div class="add-smiles">
+                                <span class="em em-expressionless" title="add icon"></span>
+                            </div>
+                            <div class="smiles-bunch">
+                                <i class="em em---1"></i>
+                                <i class="em em-smiley"></i>
+                                <i class="em em-anguished"></i>
+                                <i class="em em-laughing"></i>
+                                <i class="em em-angry"></i>
+                                <i class="em em-astonished"></i>
+                                <i class="em em-blush"></i>
+                                <i class="em em-disappointed"></i>
+                                <i class="em em-worried"></i>
+                                <i class="em em-kissing_heart"></i>
+                                <i class="em em-rage"></i>
+                                <i class="em em-stuck_out_tongue"></i>
+                            </div>
+                            <!-- <button class="post_comment" type="button" value="Send" class="btn btn-primary" data-id="Post_iaug9tvbc" style="bottom:inherit;background-color: blue;">Send</button> -->
+                        </form>	
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

@@ -1,5 +1,6 @@
 var AWS = require("aws-sdk");
 var formidable = require("formidable");
+
 var fs = require("fs");
 AWS.config.update({
     region: "us-west-2",
@@ -11,23 +12,26 @@ function RandomID(){
     return '_' + Math.random().toString(36).substr(2, 9);
 }
 var docClient = new AWS.DynamoDB.DocumentClient();
-module.exports =  {   Save(data_pass){
+module.exports =  {   Save(req,res){
+    console.log(req.body);
     var paramsSpecificPost = {
         TableName : "Users",
         KeyConditionExpression: "UserID = :userID AND RefeID = :postID",
         ProjectionExpression: 'Info.Comments',
         //FilterExpression: "contains(Info.WhoCanSee, :id)",
         ExpressionAttributeValues: {
-            ":userID": data_pass.UserIDOwner,        
-            ":postID" : data_pass.postID
+            ":userID": req.body.UserIDOwner,        
+            ":postID" : req.body.postID
         }
     }
+    var id = "CommentID_" + RandomID();
+    var date = new Date();
     var cmt = {
-        "CommentID" : "Post" + RandomID(),
-        "Content" : data_pass.comment_content,
-        "PostDate" : new Date(),
+        "CommentID" : id,
+        "Content" : req.body.comment_content,
+        "PostDate" : date,
         "Comments" : [],
-        "UserName" : data_pass.userName
+        "UserName" : req.body.userName
     };  
     
     docClient.query(paramsSpecificPost,function(err,data){
@@ -37,8 +41,8 @@ module.exports =  {   Save(data_pass){
             var params = {
                 TableName: "Users",
                 Key:{
-                    "UserID": data_pass.UserIDOwner,
-                    "RefeID": data_pass.postID
+                    "UserID": req.body.UserIDOwner,
+                    "RefeID": req.body.postID
                 },
                 UpdateExpression: "set Info.Comments=:cmt",
                 ExpressionAttributeValues:{
@@ -47,13 +51,16 @@ module.exports =  {   Save(data_pass){
                 ReturnValues:"UPDATED_NEW"
             };
             docClient.update(params,function(err,data1){
-                if(err) console.log(err);
+                if(err) {
+                    console.log(err);
+                    res.json({status : 500});
+                }
                 else {
                     var params = {
                         TableName: "Users",
                         Key:{
                             "UserID": "Post",
-                            "RefeID": data_pass.postID
+                            "RefeID": req.body.postID
                         },
                         UpdateExpression: "set Info.Comments=:cmt",
                         ExpressionAttributeValues:{
@@ -64,15 +71,14 @@ module.exports =  {   Save(data_pass){
                     docClient.update(params,function(err,data2){
                         if(err) {
                             console.log(err);
-                            return;
+                            res.json({status : 500});
+                        }
+                        else {
+                            res.json({status : 200,userName: req.body.userName,commentID : id,postDate : date});
                         }
                     })
                 }
             })          
         }     
     });
-    data_pass.status = "200";
-    data_pass.postDate = cmt.PostDate;
-    data_pass.CommentID = cmt.CommentID;
-    return data_pass;
 }}
