@@ -31,7 +31,8 @@ module.exports =  {   Save(req,res){
         "Content" : req.body.comment_content,
         "PostDate" : date,
         "Comments" : [],
-        "UserName" : req.body.userName
+        "UserName" : req.body.userName,
+        "UserIDOwerComment" : req.body.UserIDOwerComment
     };  
     
     docClient.query(paramsSpecificPost,function(err,data){
@@ -74,7 +75,7 @@ module.exports =  {   Save(req,res){
                             res.json({status : 500});
                         }
                         else {
-                            res.json({status : 200,userName: req.body.userName,commentID : id,postDate : date});
+                            res.render("comment",{comment : cmt,postID : req.body.postID,type : 1});
                         }
                     })
                 }

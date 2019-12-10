@@ -40,11 +40,12 @@ function shuffle(array) {
 
 module.exports.Index = (req, res) => {
     //console.log(req.UserID);
-
+    var userID = "";
     jwt.verify(req.cookies.token, 'secretkey', (err, data) => {
         if (err) res.sendStatus(403);
         else {
             console.log(data);
+            
             var paramsAllPost = {
                 TableName: "Users",
                 KeyConditionExpression: "UserID = :post",
@@ -56,183 +57,23 @@ module.exports.Index = (req, res) => {
                 },
                 Limit: 20
             }
+            userID = data.user.userID;
             docClient.query(paramsAllPost, function (err, data) {
                 if (err) {
                     console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
                 } else {
-                    // console.log("Query succeeded.");
+                    console.log("Query succeeded.");
+                    console.log("Count: " + data.Items.length);
                     // console.log(data.Items[0].Info.Comments.length);
                     console.log(data);
                     var post = shuffle(data.Items);
                     //  console.log("Random");
-                    res.render("index", ({posts: post}));
+                    res.render("index", ({posts: post,userID : userID}));
                 }
             });
         }
     })
 }
-// New Post
-module.exports.Post = (req, res) => {
-    console.log("Post");
-    var type = "";
-    var url = "";
-    let form = new formidable.IncomingForm();
-    form.uploadPicture = "public/images/"
-    form.uploadVideo = "public/video/"
-    form.uploadMusic = "public/music/"
-    form.uploadFile = "public/file/"
-    form.parse(req, function (err, fields, files) {
-        var picture = files.picture.name;
-        var video = files.video.name;
-        var music = files.music.name;
-        var file_document = files.file_document.name;
-        // Save File and set type, url
-        if (picture != "") {
-            let tmpPath = files.picture.path;
-            let newPath = form.uploadPicture + files.picture.name;
-            fs.rename(tmpPath, newPath, (err) => {
-                if (err) console.log(err);
-                else {
-                    fs.readFile(newPath, (err, fileUploaded) => {
-                        if (err) console.log(err);
-                        console.log("Saved Picture");
-                    });
-                }
-            });
-            type = "Photo";
-            url = "/images/" + picture;
-        } else if (music != "") {
-            let tmpPath = files.music.path;
-            let newPath = form.uploadMusic + files.music.name;
-            fs.rename(tmpPath, newPath, (err) => {
-                if (err) console.log(err);
-                else {
-                    fs.readFile(newPath, (err, fileUploaded) => {
-                        if (err) console.log(err);
-                        console.log("Saved Music");
-                    });
-                }
-            });
-            type = "Music";
-            url = "/music/" + music;
-        } else if (video != "") {
-            let tmpPath = files.video.path;
-            let newPath = form.uploadVideo + files.video.name;
-            fs.rename(tmpPath, newPath, (err) => {
-                if (err) console.log(err);
-                else {
-                    fs.readFile(newPath, (err, fileUploaded) => {
-                        if (err) console.log(err);
-                        console.log("Saved Video");
-                    });
-                }
-            });
-            type = "Video";
-            url = "/video/" + video;
-        } else if (file_document != "") {
-            let tmpPath = files.file_document.path;
-            let newPath = form.uploadFile + files.file_document.name;
-            fs.rename(tmpPath, newPath, (err) => {
-                if (err) console.log(err);
-                else {
-                    fs.readFile(newPath, (err, fileUploaded) => {
-                        if (err) console.log(err);
-                        console.log("Saved File");
-                    });
-                }
-            });
-            type = "Text";
-            url = "/file/" + file_document;
-        }
-        // Set Post Time
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
-        var postDate = mm + "/" + dd + "/" + yyyy;
-        // Set PostID
-        var PostID = RandomID();
-        // Set UserId
-        var UserID = fields.UserID;
-        // Set Description
-        var description = fields.post_content;
-        console.log(PostID);
-        // Set Who Can See
-        var whoCanSee = [];
-        whoCanSee.push(fields.UserID);
-        var paramsUserFriends = {
-            TableName: "Users",
-            KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
-            ProjectionExpression: 'UserID',
-            ExpressionAttributeValues: {
-                ":reid": "Friend_",
-                ":userid": "123456"
-            }
-        };
-        docClient.query(paramsUserFriends, function (err, data) {
-            if (err) {
-                console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-            } else {
-                console.log("Query List Friend Successed.");
-                console.log(data.Items);
-                var whoCanSee = [];
-                data.Items.forEach(function (Item) {
-                    whoCanSee.push(Item.UserID);
-                });
-                console.log(whoCanSee);
-                var paramPost = {
-                    TableName: "Users",
-                    Item: {
-                        "UserID": "Post",
-                        "RefeID": "Post" + PostID,
-                        "Info": {
-                            "Type": type,
-                            "Description": description,
-                            "URL": url,
-                            "PostTime": postDate,
-                            "Liked": [],
-                            "Comments": [],
-                            "WhoCanSee": whoCanSee,
-                        }
-                    }
-                };
-                var paramPostUser = {
-                    TableName: "Users",
-                    Item: {
-                        "UserID": UserID,
-                        "RefeID": "Post" + PostID,
-                        "Info": {
-                            "Type": type,
-                            "Description": description,
-                            "URL": url,
-                            "PostTime": postDate,
-                            "Liked": [],
-                            "Comments": [],
-                            "WhoCanSee": whoCanSee,
-                            "Sort": Date.now()
-                        }
-                    }
-                };
-                // Save Into All Post
-                docClient.put(paramPost, function (err, data2) {
-                    if (err) console.log(err);
-                    else {
-                        console.log("Successed");
-                        // Save Post of User
-                        docClient.put(paramPostUser, function (err, data3) {
-                            if (err) console.log(err);
-                            else {
-                                console.log("Successed");
-                                res.redirect('/');
-                            }
-                        })
-                    }
-                })
-            }
-        });
-    })
-}
-
 module.exports.Comments = (req, res) => {
     let form = new formidable.IncomingForm();
     form.parse(req, function (err, fields, files) {
@@ -317,8 +158,9 @@ module.exports.Reply = (req,res) => {
         "Content" : req.body.comment_content,
         "PostDate" : date,
         "Comments" : [],
-        "UserName" : req.body.userName
-    };
+        "UserName" : req.body.userName,
+        "UserIDOwerComment" : req.body.UserIDOwerComment
+    };  
     docClient.query(paramsSpecificPost,function(err,data){
         if(err) console.log(err);
         else {
@@ -329,13 +171,8 @@ module.exports.Reply = (req,res) => {
                     return;
                 }
              });
-            //console.log(ind);
-            data.Items[0].Info.Comments[ind].Comments.push(cmt);
-            //console.log(JSON.stringify( data.Items[0].Info.Comments[ind].Comments));
-            var stringUpdate = "set Info.Comments["+ind+"].Comments";
-            //console.log(req.body.UserIDOwner);
-            //console.log(req.body.postID);
-            //console.log(stringUpdate);
+            data.Items[0].Info.Comments[ind].Comments.push(cmt);          
+            var stringUpdate = "set Info.Comments["+ind+"].Comments";           
             var params = {
                 TableName: "Users",
                 Key:{
@@ -349,7 +186,6 @@ module.exports.Reply = (req,res) => {
                 },
                 ReturnValues:"UPDATED_NEW"
             };
-            //console.log(JSON.stringify(params));
             docClient.update(params,function(err,data1){
                 if(err){
                     console.log(err);
@@ -376,7 +212,8 @@ module.exports.Reply = (req,res) => {
                         }
                         else {
                             console.log("Updated");
-                            res.json({status : 200,userName: req.body.userName,commentID : id,postDate : date});
+                            res.render("replay",{comment : cmt,postID : req.body.postID});
+                            // res.json({status : 200,userName: req.body.userName,commentID : id,postDate : date});
                         }
                     })
                 }
@@ -384,6 +221,7 @@ module.exports.Reply = (req,res) => {
         }
     })  
 }
+// New Post
 module.exports.PostAjax = (req,res) => {
     var storage = multer.memoryStorage();
     var upload = multer({ storage: storage }).any();
@@ -395,14 +233,10 @@ module.exports.PostAjax = (req,res) => {
     uploadPicture(req,res,function(err){
     if(err) console.log(err);
     else {
-        // console.log(req.file.location);
-        // console.log(req.body);
         console.log(req.file);
         if(typeof(req.file) != "undefined") url = req.file.location;
         type = req.body.type;
-        postDate = Date.now().toString();
-        var whoCanSee = [];
-        whoCanSee.push(req.body.UserID);
+        postDate = Date.now().toString();      
         var paramsUserFriends = {
             TableName : "Users",
             KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
@@ -419,6 +253,7 @@ module.exports.PostAjax = (req,res) => {
                 console.log("Query List Friend Successed.");
                 console.log(data.Items);
                 var  whoCanSee = [];
+                whoCanSee.push(req.body.UserID);
                 data.Items.forEach(function(Item){
                     whoCanSee.push(Item.UserID);
                 });
@@ -436,6 +271,7 @@ module.exports.PostAjax = (req,res) => {
                             "Liked": [],
                             "Comments": [],
                             "WhoCanSee": whoCanSee,
+                            "By" : req.body.UserID
                         }
                     }
                 };
@@ -452,6 +288,7 @@ module.exports.PostAjax = (req,res) => {
                             "Liked": [],
                             "Comments": [],
                             "WhoCanSee": whoCanSee,
+                            "By" : req.body.UserID,
                             "Sort" : Date.now()
                         }
                     }
@@ -461,7 +298,7 @@ module.exports.PostAjax = (req,res) => {
                     if(err) console.log(err);
                     else {
                         //console.log("Successed");
-                        console.log(JSON.stringify(paramPostUser.Item));
+                        //console.log(JSON.stringify(paramPostUser.Item));
                         // Save Post of User
                         docClient.put(paramPostUser,function(err,data3){
                             if(err) console.log(err);

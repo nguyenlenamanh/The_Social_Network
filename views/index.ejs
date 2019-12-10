@@ -556,7 +556,7 @@
 										<div class="newpst-input">
 											<form method="post" action="/post" enctype="multipart/form-data" id="frmPostNew">
 												<div id="showInfo"></div>
-												<input type="hidden" value="123456" name="UserID" id="UserID">
+												<input type="hidden" value="<%=userID%>" name="UserID" id="UserID">
 												<textarea rows="2" placeholder="write something" name="post_content" id="post_content"></textarea>
 												<div class="attachments">
 													<ul>
@@ -685,27 +685,35 @@
 																				</div>
 																				<div class="we-comment">
 																					<div class="coment-head">
-																						<h5><a href="time-line.html" title="" id="un_<%=post.RefeID%><%=post.Info.Comments[i].CommentID%>">Donald Trump</a></h5>
+																						<h5><a href="time-line.html" title="" id="un_<%=post.RefeID%><%=post.Info.Comments[i].CommentID%>"><%=post.Info.Comments[i].UserName%></a></h5>
 																						<span><%=post.Info.Comments[i].PostDate%></span>
-																						<a class="we-reply" title="Reply" style="color: #088dcd;cursor: pointer;"><i class="fa fa-reply reply_comment" id="<%=post.RefeID%>;<%=post.Info.Comments[i].CommentID%>"></i></a>
+																						<a class="we-reply" title="Reply" style="color: #088dcd;cursor: pointer;"><i class="fa fa-reply reply_comment" id="<%=post.RefeID%>;<%=post.Info.Comments[i].CommentID%>"  onclick="Replay(this)"></i></a>
 																					</div>
 																					<p><%=post.Info.Comments[i].Content%>
-																						<i class="em em-smiley"></i>
+																						<!-- <i class="em em-smiley"></i> -->
 																					</p>
 																				</div>
 																				<%if(post.Info.Comments[i].Comments.length > 0){%>
-																					<ul id="ul_<%=post.RefeID%>">
+																					<ul id="ul_<%=post.Info.Comments[i].CommentID%>">
 																						<%var length2 = post.Info.Comments[i].Comments.length %>												
 																						<%for(var j = 0;j < length2;j++){%>
-																							<li id="CommentID__ozxsn8z8v">
+																							<li id="<%=post.Info.Comments[i].Comments[j].CommentID%>">
 																								<div class="comet-avatar"><img src="images/resources/comet-1.jpg"></div>
 																								<div class="we-comment">
 																									<div class="coment-head">
-																										<h5><a href="time-line.html" id="un_<%=post.RefeID%><%=post.Info.Comments[i].Comments[j].CommentID%>"><%=post.Info.Comments[i].Comments[j].UserName%></a></h5><span><%=post.Info.Comments[i].Comments[j].PostDate%></span><a style="color: #088dcd;cursor: pointer;" class="we-reply" title="Reply"><i class="fa fa-reply reply_comment" id="NaN;CommentID__ozxsn8z8v"></i></a></div>
+																										<h5><a href="time-line.html" id="un_<%=post.RefeID%><%=post.Info.Comments[i].Comments[j].CommentID%>"><%=post.Info.Comments[i].Comments[j].UserName%></a></h5>
+																										<span><%=post.Info.Comments[i].Comments[j].PostDate%></span>
+																										<!-- <a style="color: #088dcd;cursor: pointer;" class="we-reply" title="Reply"><i class="fa fa-reply reply_comment" id="NaN;CommentID__ozxsn8z8v"></i></a></div> -->
 																									<p><%=post.Info.Comments[i].Comments[j].Content%></p>
 																								</div>
+														
 																							</li>
+
 																						<%}%>
+																					</ul>
+																				<%}else{%>
+																					<ul  id="ul_<%=post.Info.Comments[i].CommentID%>">
+
 																					</ul>
 																				<%}%>
 																		</li>
@@ -719,8 +727,9 @@
 																			
 																			<input type="hidden" value="User Name Test" name="userName" id="userName<%=post.RefeID%>">
 																			<input type="hidden" value="<%=post.Info.WhoCanSee[0]%>" name="UserIDOwner" id="UserIDOwner<%=post.RefeID%>">
-																			<input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">									
-																			<textarea  placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
+																			<input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">
+																			<input type="hidden" value="<%=userID%>" name="postID" id="UserIDOwnerComment<%=post.RefeID%>">									
+																			<textarea  onkeydown="PostComment(event,this)" placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
 																			<div class="add-smiles">
 																				<span class="em em-expressionless" title="add icon"></span>
 																			</div>

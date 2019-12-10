@@ -1,0 +1,20 @@
+
+<li id="<%=comment.CommentID%>">
+    <div class="comet-avatar">
+        <img src="images/resources/comet-1.jpg" alt="">
+    </div>
+    <div class="we-comment">
+        <div class="coment-head">
+            <h5><a href="time-line.html" title="" id="un_<%=postID%><%=comment.CommentID%>"><%=comment.UserName%></a></h5>
+            <span><%=comment.PostDate%></span>
+            <a class="we-reply" title="Reply" style="color: #088dcd;cursor: pointer;"><i class="fa fa-reply reply_comment" id="<%=postID%>;<%=comment.CommentID%>" onclick="Replay(this)"></i></a>
+        </div>
+        <p><%=comment.Content%>
+            <!-- <i class="em em-smiley"></i> -->
+        </p>
+        
+    </div> 
+    <ul id="ul_<%=comment.CommentID%>">
+            
+    </ul>
+</li>

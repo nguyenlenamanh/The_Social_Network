@@ -28,7 +28,7 @@ app.set('views','./views');
 var docClient = new AWS.DynamoDB.DocumentClient();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
-server.listen(3005);
+server.listen(3000);
 
 var connectedUsers = {};
 

@@ -97,7 +97,7 @@
                             <input type="hidden" value="User Name Test" name="userName" id="userName<%=post.RefeID%>">
                             <input type="hidden" value="<%=post.UserID%>" name="UserIDOwner" id="UserIDOwner<%=post.RefeID%>">
                             <input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">									
-                            <textarea placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
+                            <textarea onkeydown="PostComment(event,this)" placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
                             <div class="add-smiles">
                                 <span class="em em-expressionless" title="add icon"></span>
                             </div>
