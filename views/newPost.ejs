@@ -6,7 +6,7 @@
             </figure>
             <div class="friend-name">
                 <ins><a href="time-line.html" title="">Janice Griffith</a></ins>
-                <span>published: <%=new Date(post.Info.PostTime)%></span>
+                <span>published: <%=moment(post.Info.PostTime).format( 'MMM-DD-YYYY')%></span>
             </div>
             <div class="post-meta">
                     <%if(post.Info.Type == "Music"){%>

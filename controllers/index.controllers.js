@@ -4,6 +4,7 @@ var fs = require("fs");
 var jwt = require('jsonwebtoken');
 var multer = require("multer");
 var postControllers = require("./post.controllers");
+var moment = require('moment');
 AWS.config.update({
     region: "us-west-2",
     endpoint: "http://localhost:8000",
@@ -68,7 +69,7 @@ module.exports.Index = (req, res) => {
                     console.log(data);
                     var post = shuffle(data.Items);
                     //  console.log("Random");
-                    res.render("index", ({posts: post,userID : userID}));
+                    res.render("index", ({posts: post,userID : userID,moment : moment}));
                 }
             });
         }
@@ -156,7 +157,7 @@ module.exports.Reply = (req,res) => {
     var cmt = {
         "CommentID" : id,
         "Content" : req.body.comment_content,
-        "PostDate" : date,
+        "PostDate" : date.toJSON(),
         "Comments" : [],
         "UserName" : req.body.userName,
         "UserIDOwerComment" : req.body.UserIDOwerComment
@@ -236,7 +237,7 @@ module.exports.PostAjax = (req,res) => {
         console.log(req.file);
         if(typeof(req.file) != "undefined") url = req.file.location;
         type = req.body.type;
-        postDate = Date.now().toString();      
+        postDate = new Date();      
         var paramsUserFriends = {
             TableName : "Users",
             KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
@@ -267,7 +268,7 @@ module.exports.PostAjax = (req,res) => {
                             "Type": type,
                             "Description": req.body.content,
                             "URL": url,
-                            "PostTime": postDate,
+                            "PostTime": postDate.toJSON(),
                             "Liked": [],
                             "Comments": [],
                             "WhoCanSee": whoCanSee,
@@ -305,7 +306,7 @@ module.exports.PostAjax = (req,res) => {
                             else {
                                 console.log("Successed");
                                 console.log(JSON.stringify(data3));
-                                res.render("newPost",{post : paramPostUser.Item});
+                                res.render("newPost",{post : paramPostUser.Item,moment : moment});
                             }
                         })
                     }

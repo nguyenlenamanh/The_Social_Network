@@ -26,10 +26,11 @@ module.exports =  {   Save(req,res){
     }
     var id = "CommentID_" + RandomID();
     var date = new Date();
+    console.log(date.toJSON());
     var cmt = {
         "CommentID" : id,
         "Content" : req.body.comment_content,
-        "PostDate" : date,
+        "PostDate" : date.toJSON(),
         "Comments" : [],
         "UserName" : req.body.userName,
         "UserIDOwerComment" : req.body.UserIDOwerComment
@@ -57,7 +58,7 @@ module.exports =  {   Save(req,res){
                     res.json({status : 500});
                 }
                 else {
-                    var params = {
+                    var params1 = {
                         TableName: "Users",
                         Key:{
                             "UserID": "Post",
@@ -69,7 +70,7 @@ module.exports =  {   Save(req,res){
                         },
                         ReturnValues:"UPDATED_NEW"
                     };
-                    docClient.update(params,function(err,data2){
+                    docClient.update(params1,function(err,data2){
                         if(err) {
                             console.log(err);
                             res.json({status : 500});

@@ -598,7 +598,7 @@
 															</figure>
 															<div class="friend-name">
 																<ins><a href="time-line.html" title="">Janice Griffith</a></ins>
-																<span>published: <%=post.Info.PostTime%></span>
+																<span>published: <%=moment(post.Info.PostTime).format('MMM-DD-YYYY')%></span>
 															</div>
 															<div class="post-meta">
 																<%if(post.Info.Type == "Photo"){%>
@@ -686,7 +686,7 @@
 																				<div class="we-comment">
 																					<div class="coment-head">
 																						<h5><a href="time-line.html" title="" id="un_<%=post.RefeID%><%=post.Info.Comments[i].CommentID%>"><%=post.Info.Comments[i].UserName%></a></h5>
-																						<span><%=post.Info.Comments[i].PostDate%></span>
+																						<span><%=moment(post.Info.Comments[i].PostDate).format( 'MMM-DD-YYYY')%></span>
 																						<a class="we-reply" title="Reply" style="color: #088dcd;cursor: pointer;"><i class="fa fa-reply reply_comment" id="<%=post.RefeID%>;<%=post.Info.Comments[i].CommentID%>"  onclick="Replay(this)"></i></a>
 																					</div>
 																					<p><%=post.Info.Comments[i].Content%>
@@ -702,7 +702,7 @@
 																								<div class="we-comment">
 																									<div class="coment-head">
 																										<h5><a href="time-line.html" id="un_<%=post.RefeID%><%=post.Info.Comments[i].Comments[j].CommentID%>"><%=post.Info.Comments[i].Comments[j].UserName%></a></h5>
-																										<span><%=post.Info.Comments[i].Comments[j].PostDate%></span>
+																										<span><%=moment(post.Info.Comments[i].Comments[j].PostDate).format( 'MMM-DD-YYYY')%></span>
 																										<!-- <a style="color: #088dcd;cursor: pointer;" class="we-reply" title="Reply"><i class="fa fa-reply reply_comment" id="NaN;CommentID__ozxsn8z8v"></i></a></div> -->
 																									<p><%=post.Info.Comments[i].Comments[j].Content%></p>
 																								</div>
