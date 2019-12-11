@@ -3,6 +3,7 @@ var AWS = require("aws-sdk");
 var formidable = require("formidable");
 var fs = require("fs");
 var jwt = require('jsonwebtoken');
+var moment = require('moment');
 
 AWS.config.update({
     region: "us-west-2",
@@ -52,13 +53,14 @@ module.exports.timeLine = (req,res) => {
                     ":userid": data.user.userID
                 }
             };
+            userID = data.user.userID;
             docClient.query(paramsUserPosts, function(err, data) {
                 if (err) {
                     console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
                 } else {
                     console.log(data);
                     var post = shuffle(data.Items);
-                    res.render("timeLine",({posts: post}));
+                    res.render("timeLine",({posts: post,userID : userID,moment : moment}));
                 }
             });
         }

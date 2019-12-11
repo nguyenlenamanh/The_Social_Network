@@ -289,7 +289,8 @@ app.get('/timeLine',function (req,res) {
 })
 
 app.post('/timeLine',function (req,res) {
-    timeLineController.post(req,res)
+    console.log("sdasd");
+    indexController.Post(req,res);
 })
 app.get('/timeLinePhoto',function (req,res) {
     timeLineController.photo(req,res)

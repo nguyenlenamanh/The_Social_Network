@@ -1,6 +1,7 @@
 var listR = [];
 var listN = [];
 function Post(){
+    console.log("Chay post");
     var formData = new FormData();
     var content = document.getElementById("post_content");
     var UserID = document.getElementById("UserID").value;
@@ -33,6 +34,10 @@ function Post(){
        if(res.data != ""){
            //alert(res.data);
            var parent = document.getElementById("allPost");
+           var form = document.querySelector('#showInfo');
+           var textarea = document.querySelector('#post_content');
+            form.innerHTML = "";
+            textarea.value = "";
            parent.insertBefore(createElementFromHTML(res.data),parent.firstElementChild);
        }
     });
