@@ -298,9 +298,15 @@ app.get('/timeLinePhoto',function (req,res) {
 app.get('/timeLineFreinds',function (req,res) {
     timeLineController.freind(req,res)
 })
-
+app.get('/timeLineVideo',function (req,res) {
+    timeLineController.video(req,res)
+})
 app.get('/timeLineAbout',function (req,res) {
     timeLineController.about(req,res)
+})
+app.get('/loadMore',function (req,res) {
+    console.log("COUNT = " + req.query.id);
+    timeLineController.loadMore(req,res,parseInt(req.query.id))
 })
 // =====9/12/2019=======
 app.post('/reply',function(req,res){

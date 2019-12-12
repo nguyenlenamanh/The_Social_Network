@@ -396,9 +396,6 @@ $(function() {
 		$(this).parent().toggleClass('active');
 		return false;
 	});	
-	
-
-
 });//document ready end
 
 

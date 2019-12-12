@@ -670,7 +670,8 @@
 										</div>
 									</div>
 								</div><!-- add post new box -->
-								<div class="loadMore" id="allPost">								
+								<div class="loadMore" >	
+                                    <div id="allPost">						
 										<%posts.forEach(function(post){%>
 											<div class="central-meta item">
 													<div class="user-post">
@@ -837,8 +838,9 @@
 														</div>
 													</div>
 												</div> 
-										<%})%>
-									<button class="btn-view btn-load-more">Load More</button>
+                                        <%})%>
+                                    </div>	
+									<button class="btn-view btn-load-more" onclick="LoadMore(document.getElementById('allPost').childElementCount)">Load More</button>
 								</div>
 							</div><!-- centerl meta -->
                             <div class="col-lg-3">

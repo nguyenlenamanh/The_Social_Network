@@ -46,7 +46,7 @@ module.exports.Index = (req, res) => {
         if (err) res.sendStatus(403);
         else {
             console.log(data);
-            
+
             var paramsAllPost = {
                 TableName: "Users",
                 KeyConditionExpression: "UserID = :post",
@@ -69,7 +69,7 @@ module.exports.Index = (req, res) => {
                     console.log(data);
                     var post = shuffle(data.Items);
                     //  console.log("Random");
-                    res.render("index", ({posts: post,userID : userID,moment : moment}));
+                    res.render("index", ({ posts: post, userID: userID, moment: moment }));
                 }
             });
         }
@@ -138,92 +138,92 @@ module.exports.Comments = (req, res) => {
         });
     })
 }
-module.exports.Reply = (req,res) => {
+module.exports.Reply = (req, res) => {
     console.log(req.body.keyPair);
     var keyPair = req.body.keyPair;
     var postID = keyPair.split(";")[0];
     var commentID = keyPair.split(";")[1];
     var paramsSpecificPost = {
-        TableName : "Users",
-        KeyConditionExpression: "UserID = :userID AND RefeID = :postID",       
+        TableName: "Users",
+        KeyConditionExpression: "UserID = :userID AND RefeID = :postID",
         ProjectionExpression: 'Info.Comments',
         ExpressionAttributeValues: {
-            ":userID": req.body.UserIDOwner,        
-            ":postID" : req.body.postID,      
+            ":userID": req.body.UserIDOwner,
+            ":postID": req.body.postID,
         }
     }
     var id = "CommentID_" + RandomID();
     var date = new Date();
     var cmt = {
-        "CommentID" : id,
-        "Content" : req.body.comment_content,
-        "PostDate" : date.toJSON(),
-        "Comments" : [],
-        "UserName" : req.body.userName,
-        "UserIDOwerComment" : req.body.UserIDOwerComment
-    };  
-    docClient.query(paramsSpecificPost,function(err,data){
-        if(err) console.log(err);
+        "CommentID": id,
+        "Content": req.body.comment_content,
+        "PostDate": date.toJSON(),
+        "Comments": [],
+        "UserName": req.body.userName,
+        "UserIDOwerComment": req.body.UserIDOwerComment
+    };
+    docClient.query(paramsSpecificPost, function (err, data) {
+        if (err) console.log(err);
         else {
             var ind;
-            data.Items[0].Info.Comments.forEach(function(comment,index){
-                if(comment.CommentID ==  commentID) {
+            data.Items[0].Info.Comments.forEach(function (comment, index) {
+                if (comment.CommentID == commentID) {
                     ind = index;
                     return;
                 }
-             });
-            data.Items[0].Info.Comments[ind].Comments.push(cmt);          
-            var stringUpdate = "set Info.Comments["+ind+"].Comments";           
+            });
+            data.Items[0].Info.Comments[ind].Comments.push(cmt);
+            var stringUpdate = "set Info.Comments[" + ind + "].Comments";
             var params = {
                 TableName: "Users",
-                Key:{
+                Key: {
                     "UserID": req.body.UserIDOwner,
                     "RefeID": req.body.postID
                 },
                 UpdateExpression: stringUpdate + "=:cmt",
-                ExpressionAttributeValues:{
-                    
-                    ":cmt" : data.Items[0].Info.Comments[ind].Comments
+                ExpressionAttributeValues: {
+
+                    ":cmt": data.Items[0].Info.Comments[ind].Comments
                 },
-                ReturnValues:"UPDATED_NEW"
+                ReturnValues: "UPDATED_NEW"
             };
-            docClient.update(params,function(err,data1){
-                if(err){
+            docClient.update(params, function (err, data1) {
+                if (err) {
                     console.log(err);
-                    res.json({"status" : 500});
+                    res.json({ "status": 500 });
                 }
                 else {
                     params = {
                         TableName: "Users",
-                        Key:{
+                        Key: {
                             "UserID": "Post",
                             "RefeID": req.body.postID
                         },
                         UpdateExpression: stringUpdate + "=:cmt",
-                        ExpressionAttributeValues:{
-                            
-                            ":cmt" : data.Items[0].Info.Comments[ind].Comments
+                        ExpressionAttributeValues: {
+
+                            ":cmt": data.Items[0].Info.Comments[ind].Comments
                         },
-                        ReturnValues:"UPDATED_NEW"
+                        ReturnValues: "UPDATED_NEW"
                     };
-                    docClient.update(params,function(err,data2){
-                        if(err) {
+                    docClient.update(params, function (err, data2) {
+                        if (err) {
                             console.log(err);
-                            res.json({"status" : 500});
+                            res.json({ "status": 500 });
                         }
                         else {
                             console.log("Updated");
-                            res.render("replay",{comment : cmt,postID : req.body.postID});
+                            res.render("replay", { comment: cmt, postID: req.body.postID });
                             // res.json({status : 200,userName: req.body.userName,commentID : id,postDate : date});
                         }
                     })
                 }
             })
         }
-    })  
+    })
 }
 // New Post
-module.exports.PostAjax = (req,res) => {
+module.exports.PostAjax = (req, res) => {
     var storage = multer.memoryStorage();
     var upload = multer({ storage: storage }).any();
     var type = " ";
@@ -231,88 +231,88 @@ module.exports.PostAjax = (req,res) => {
     var postDate;
     var PostID = RandomID();
     var uploadPicture = postControllers.single("file");
-    uploadPicture(req,res,function(err){
-    if(err) console.log(err);
-    else {
-        console.log(req.file);
-        if(typeof(req.file) != "undefined") url = req.file.location;
-        type = req.body.type;
-        postDate = new Date();      
-        var paramsUserFriends = {
-            TableName : "Users",
-            KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
-            ProjectionExpression: 'UserID',
-            ExpressionAttributeValues: {
-                ":reid": "Friend_",
-                ":userid": req.body.UserID
-            }
-        };
-        docClient.query(paramsUserFriends, function(err, data) {
-            if (err) {
-                console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
-            } else {
-                console.log("Query List Friend Successed.");
-                console.log(data.Items);
-                var  whoCanSee = [];
-                whoCanSee.push(req.body.UserID);
-                data.Items.forEach(function(Item){
-                    whoCanSee.push(Item.UserID);
-                });
-                console.log(whoCanSee);
-                var paramPost = {
-                    TableName: "Users",
-                    Item: {
-                        "UserID":  "Post",
-                        "RefeID": "Post" + PostID,
-                        "Info" : {
-                            "Type": type,
-                            "Description": req.body.content,
-                            "URL": url,
-                            "PostTime": postDate.toJSON(),
-                            "Liked": [],
-                            "Comments": [],
-                            "WhoCanSee": whoCanSee,
-                            "By" : req.body.UserID
-                        }
-                    }
-                };
-                var paramPostUser = {
-                    TableName: "Users",
-                    Item: {
-                        "UserID":  req.body.UserID,
-                        "RefeID": "Post" + PostID,
-                        "Info" : {
-                            "Type": type,
-                            "Description": req.body.content,
-                            "URL": url,
-                            "PostTime": postDate,
-                            "Liked": [],
-                            "Comments": [],
-                            "WhoCanSee": whoCanSee,
-                            "By" : req.body.UserID,
-                            "Sort" : Date.now()
-                        }
-                    }
-                };
-                // Save Into All Post
-                docClient.put(paramPost,function(err,data2){
-                    if(err) console.log(err);
-                    else {
-                        //console.log("Successed");
-                        //console.log(JSON.stringify(paramPostUser.Item));
-                        // Save Post of User
-                        docClient.put(paramPostUser,function(err,data3){
-                            if(err) console.log(err);
-                            else {
-                                console.log("Successed");
-                                console.log(JSON.stringify(data3));
-                                res.render("newPost",{post : paramPostUser.Item,moment : moment});
+    uploadPicture(req, res, function (err) {
+        if (err) console.log(err);
+        else {
+            console.log(req.file);
+            if (typeof (req.file) != "undefined") url = req.file.location;
+            type = req.body.type;
+            postDate = new Date();
+            var paramsUserFriends = {
+                TableName: "Users",
+                KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
+                ProjectionExpression: 'UserID',
+                ExpressionAttributeValues: {
+                    ":reid": "Friend_",
+                    ":userid": req.body.UserID
+                }
+            };
+            docClient.query(paramsUserFriends, function (err, data) {
+                if (err) {
+                    console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
+                } else {
+                    console.log("Query List Friend Successed.");
+                    console.log(data.Items);
+                    var whoCanSee = [];
+                    whoCanSee.push(req.body.UserID);
+                    data.Items.forEach(function (Item) {
+                        whoCanSee.push(Item.UserID);
+                    });
+                    console.log(whoCanSee);
+                    var paramPost = {
+                        TableName: "Users",
+                        Item: {
+                            "UserID": "Post",
+                            "RefeID": "Post" + PostID,
+                            "Info": {
+                                "Type": type,
+                                "Description": req.body.content,
+                                "URL": url,
+                                "PostTime": postDate.toJSON(),
+                                "Liked": [],
+                                "Comments": [],
+                                "WhoCanSee": whoCanSee,
+                                "By": req.body.UserID
                             }
-                        })
-                    }
-                })
-            }
-        });
-      }
-    })    
+                        }
+                    };
+                    var paramPostUser = {
+                        TableName: "Users",
+                        Item: {
+                            "UserID": req.body.UserID,
+                            "RefeID": "Post" + PostID,
+                            "Info": {
+                                "Type": type,
+                                "Description": req.body.content,
+                                "URL": url,
+                                "PostTime": postDate,
+                                "Liked": [],
+                                "Comments": [],
+                                "WhoCanSee": whoCanSee,
+                                "By": req.body.UserID,
+                                "Sort": Date.now()
+                            }
+                        }
+                    };
+                    // Save Into All Post
+                    docClient.put(paramPost, function (err, data2) {
+                        if (err) console.log(err);
+                        else {
+                            //console.log("Successed");
+                            //console.log(JSON.stringify(paramPostUser.Item));
+                            // Save Post of User
+                            docClient.put(paramPostUser, function (err, data3) {
+                                if (err) console.log(err);
+                                else {
+                                    console.log("Successed");
+                                    console.log(JSON.stringify(data3));
+                                    res.render("newPost", { post: paramPostUser.Item, moment: moment });
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+        }
+    })
 }

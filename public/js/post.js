@@ -29,6 +29,7 @@ function Post(){
             "content-type" : "multipart/form-data"
         }
     };
+    console.log(JSON.stringify(formData));
     axios.post('/postAjax',formData,contentType)
     .then(function(res){
        if(res.data != ""){
@@ -42,6 +43,22 @@ function Post(){
        }
     });
 }
+
+function LoadMore(count){
+    var formData = new FormData();
+    console.log(JSON.stringify(formData.get("UserID")));
+    var contentType = {
+        headers : {
+            "content-type" : "multipart/form-data"
+        }
+    };
+    axios.get('/loadMore?id=' + count,formData,contentType)
+    .then(function(res){
+        var parent = document.getElementById("allPost");
+        parent.innerHTML += res.data;
+    });
+}
+
 function PostComment(event,obj){
     var comment = obj.value;
     if(event.which == 13){
@@ -107,4 +124,5 @@ function createElementFromHTML(htmlString) {
     div.innerHTML = htmlString.trim(); 
     return div.firstChild; 
 }
+
 
