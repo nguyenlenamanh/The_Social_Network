@@ -821,9 +821,13 @@
 													</div>
 												</div>
 											</div>
+											<%if(post==posts[posts.length-1]){%>
+											<button id="btnLoadMore" userId="<%=post.UserID%>" ref="<%=post.RefeID%>" class="btn-view btn-load-more" onclick="LoadMore()">
+												Load More
+											</button>
+											<%}%>
 										<% }) %>
 									</div>
-									<button class="btn-view btn-load-more">Load More</button>
 								</div>
 							</div><!-- centerl meta -->
 							<div class="col-lg-3">

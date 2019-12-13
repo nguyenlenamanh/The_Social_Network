@@ -916,11 +916,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <%if(post==posts[posts.length-1]){%>
+                                                <button id="btnLoadMore" userId="<%=post.UserID%>" ref="<%=post.RefeID%>" class="btn-view btn-load-more" onclick="LoadMore()">
+                                                    Load More
+                                                </button>
+                                            <%}%>
                                         <% }) %>
                                     </div>
-                                    <button id="btnLoadMore" class="btn-view btn-load-more"
-                                            onclick="LoadMore(this.id,this.ref)">Load More
-                                    </button>
+
                                 </div>
                             </div><!-- centerl meta -->
                             <div class="col-lg-3">
@@ -1286,7 +1289,8 @@
 <script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
 <script src="js/main.min.js"></script>
 <script src="js/script.js"></script>
-
+<script src="axios.js"></script>
+<script src="js/post.js" id="handle2"></script>
 <script>
     function changeUrl(input, type) {
         if (input.files && input.files[0]) {

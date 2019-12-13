@@ -313,8 +313,16 @@ app.get('/timeLineAbout',function (req,res) {
     timeLineController.about(req,res)
 })
 app.get('/loadMore',function (req,res) {
-    console.log("COUNT = " + req.query.id);
-    timeLineController.loadMore(req,res,parseInt(req.query.id))
+    console.log("HAY " + req.query.id + "|" + req.query.ref);
+    var id = req.query.id;
+    var ref = req.query.ref;
+    timeLineController.loadMore(req,res,id,ref);
+})
+app.get('/loadMoreIndex',function (req,res) {
+    console.log("HAY " + req.query.id + "|" + req.query.ref);
+    var id = req.query.id;
+    var ref = req.query.ref;
+    timeLineController.loadMoreIndex(req,res,id,ref);
 })
 // =====9/12/2019=======
 app.post('/reply',function(req,res){

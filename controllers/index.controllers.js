@@ -56,7 +56,7 @@ module.exports.Index = (req, res) => {
                     ":post": "Post",
                     ":id": data.user.userID
                 },
-                Limit: 20
+                Limit: 4
             }
             userID = data.user.userID;
             docClient.query(paramsAllPost, function (err, data) {

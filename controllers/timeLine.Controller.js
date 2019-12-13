@@ -186,35 +186,59 @@ function GetUserByID (userID) {
     });
 }
 
-module.exports.loadMore = (req,res,count) => {
+module.exports.loadMore = (req,res,id,ref) => {
     //console.log(req.UserID);
     jwt.verify(req.cookies.token,'secretkey', async (err, data) => {
-        var num = 4 +count;
-        //console.log("----------------------" + num);
+        console.log(ref + "|" + id);
         var paramsUserPosts = {
-            TableName : "Users",
+            TableName: "Users",
             ExclusiveStartKey: {
-                "UserID": "20161012114321726034249204",
-                "RefeID": "2016-10-12 11:44:09"         
+                "RefeID": ref + "",
+                "UserID": id + ""
             },
-            KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
+            FilterExpression: "UserID = :userid and begins_with(RefeID, :reid)",
             ExpressionAttributeValues: {
                 ":reid": "Post_",
                 ":userid": data.user.userID
             },
-            Limit: num
+            Limit:4
         };
-
-        //console.log(req.get("UserID"));
-        docClient.query(paramsUserPosts, function(err, data) {
+        docClient.scan(paramsUserPosts, function(err, data) {
             if (err) {
+                console.log("error",err);
                 return resolve(false);
             } else {
-                let ls = [];
-                for(var i = count;i<data.Items.length;i++){
-                    ls.push(data.Items[i]);
-                }
-                res.render("PostLoad",{posts : ls,moment : moment});
+                console.log("HERE => " + JSON.stringify(data.Items),null,'\t');
+                res.render("PostLoad",{posts : data.Items,moment : moment});
+            }
+        });
+    })
+}
+
+module.exports.loadMoreIndex = (req,res,id,ref) => {
+    //console.log(req.UserID);
+    jwt.verify(req.cookies.token,'secretkey', async (err, data) => {
+        console.log(ref + "|" + id);
+        var paramsUserPosts = {
+            TableName: "Users",
+            ExclusiveStartKey: {
+                "RefeID": ref + "",
+                "UserID": id + ""
+            },
+            FilterExpression: "UserID = :post AND contains(Info.WhoCanSee, :id)",
+            ExpressionAttributeValues: {
+                ":post": "Post",
+                ":id": data.user.userID
+            },
+            Limit:4
+        };
+        docClient.scan(paramsUserPosts, function(err, data) {
+            if (err) {
+                console.log("error",err);
+                return resolve(false);
+            } else {
+                console.log("HERE => " + JSON.stringify(data.Items),null,'\t');
+                res.render("PostLoad",{posts : data.Items,moment : moment});
             }
         });
     })

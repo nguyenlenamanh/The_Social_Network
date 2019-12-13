@@ -44,20 +44,42 @@ function Post(){
     });
 }
 
-function LoadMore(id,ref){
+function LoadMore(){
     var formData = new FormData();
-    console.log(JSON.stringify(formData.get("UserID")));
+    var id = $('#btnLoadMore').attr('userId');
+    var ref = $('#btnLoadMore').attr('ref');
+    console.log(id + "|" + ref);
+    $('#btnLoadMore').remove();
     var contentType = {
         headers : {
             "content-type" : "multipart/form-data"
         }
     };
-    axios.get('/loadMore?id=' + id + "&ref=" + ref,formData,contentType)
+    axios.get('/loadMoreIndex?id=' + id + "&ref=" + ref,formData,contentType)
     .then(function(res){
         var parent = document.getElementById("allPost");
         parent.innerHTML += res.data;
     });
 }
+
+function LoadMoreIndex(){
+    var formData = new FormData();
+    var id = $('#btnLoadMore').attr('userId');
+    var ref = $('#btnLoadMore').attr('ref');
+    console.log(id + "|" + ref);
+    $('#btnLoadMore').remove();
+    var contentType = {
+        headers : {
+            "content-type" : "multipart/form-data"
+        }
+    };
+    axios.get('/loadMoreIndex?id=' + id + "&ref=" + ref,formData,contentType)
+        .then(function(res){
+            var parent = document.getElementById("allPost");
+            parent.innerHTML += res.data;
+        });
+}
+
 
 function PostComment(event,obj){
     var comment = obj.value;
