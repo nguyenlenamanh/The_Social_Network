@@ -194,6 +194,10 @@ module.exports.loadMore = (req,res,count) => {
         //console.log("----------------------" + num);
         var paramsUserPosts = {
             TableName : "Users",
+            ExclusiveStartKey: {
+                "UserID": "20161012114321726034249204",
+                "RefeID": "2016-10-12 11:44:09"         
+            },
             KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
             ExpressionAttributeValues: {
                 ":reid": "Post_",
@@ -209,10 +213,8 @@ module.exports.loadMore = (req,res,count) => {
             } else {
                 let ls = [];
                 for(var i = count;i<data.Items.length;i++){
-                    //console.log(i + "=" + data.Items.length);
                     ls.push(data.Items[i]);
                 }
-                //console.log("Danh sach" + JSON.stringify(ls));
                 res.render("PostLoad",{posts : ls,moment : moment});
             }
         });

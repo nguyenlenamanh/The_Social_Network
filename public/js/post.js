@@ -44,7 +44,7 @@ function Post(){
     });
 }
 
-function LoadMore(count){
+function LoadMore(id,ref){
     var formData = new FormData();
     console.log(JSON.stringify(formData.get("UserID")));
     var contentType = {
@@ -52,7 +52,7 @@ function LoadMore(count){
             "content-type" : "multipart/form-data"
         }
     };
-    axios.get('/loadMore?id=' + count,formData,contentType)
+    axios.get('/loadMore?id=' + id + "&ref=" + ref,formData,contentType)
     .then(function(res){
         var parent = document.getElementById("allPost");
         parent.innerHTML += res.data;

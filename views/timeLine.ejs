@@ -673,7 +673,7 @@
 								<div class="loadMore" >	
                                     <div id="allPost">						
 										<%posts.forEach(function(post){%>
-											<div class="central-meta item">
+											<div id="<%post.UserID%>" class="central-meta item">
 													<div class="user-post">
 														<div class="friend-info">
 															<figure>
@@ -710,7 +710,7 @@
 																			</span>
 																		</li>
 																		<li>
-																			<span class="like" data-toggle="tooltip" title="like" data-id="">
+																			<span id="<%=post.Info.By + ';' + post.RefeID%>" class="like" data-toggle="tooltip" title="like" data-id="">
 																				<i class="ti-heart"></i>
 																				<ins>2.2k</ins>
 																			</span>
@@ -799,7 +799,7 @@
 
 																					</ul>
 																				<%}%>
-																		</li>
+                                                                        </li>
 																	<%}%>															
 																<li class="post-comment">
 																	<div class="comet-avatar">
@@ -840,7 +840,7 @@
 												</div> 
                                         <%})%>
                                     </div>	
-									<button class="btn-view btn-load-more" onclick="LoadMore(document.getElementById('allPost').childElementCount)">Load More</button>
+									<button id="btnLoadMore" class="btn-view btn-load-more" onclick="LoadMore(this.id,this.ref)">Load More</button>
 								</div>
 							</div><!-- centerl meta -->
                             <div class="col-lg-3">

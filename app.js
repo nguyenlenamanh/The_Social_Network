@@ -74,6 +74,8 @@ io.on('connection',function(socket) {
     });
 
     socket.on('send-noti-message',function(from,to,action,ReferenceID) {
+        console.log('to', to);
+
         var params = {
             TableName : "Users",
             KeyConditionExpression: "UserID = :UserID and RefeID = :RefeID",
@@ -82,9 +84,12 @@ io.on('connection',function(socket) {
                 ":RefeID": 'Noti_' + from + '_liked'
             }
         };
+
+        console.log('1---');
         
         docClient.query(params, function(err, data) {
             if (err) {
+
             } else {
                 // if liked then when clicked it means delete
                 if(data.Items.length > 0) {
@@ -96,6 +101,7 @@ io.on('connection',function(socket) {
                         }
                     };
                     docClient.delete(params, function(err, data) {
+                        console.log('2---');
                         if (err) {
                             console.error("Unable to delete item. Error JSON:", JSON.stringify(err, null, 2));
                         } else {
@@ -105,6 +111,7 @@ io.on('connection',function(socket) {
 
                     //remove like in post not implement yet
 
+                    console.log('3---');
                     var paramsSpecificPost = {
                         TableName : "Users",
                         KeyConditionExpression: "UserID = :post and RefeID = :RefeID",
@@ -121,12 +128,12 @@ io.on('connection',function(socket) {
                             var liked = data.Items[0].Info.Liked;
                             liked.splice(liked.indexOf(from),1);
                             console.log(liked);
-                    
+                            console.log('4---');
                             var paramsUpdate = {
                                 TableName:"Users",
                                 Key:{
                                     "UserID": "Post",
-                                    "RefeID": "Post_TestDemo01"
+                                    "RefeID": ReferenceID
                                 },
                                 UpdateExpression: "set Info.Liked = :newlist",
                                 ExpressionAttributeValues:{
@@ -135,6 +142,7 @@ io.on('connection',function(socket) {
                             };
                     
                             docClient.update(paramsUpdate, function(err, data) {
+                                console.log('5---');
                                 if (err) {
                                     console.error("Unable to update item. Error JSON:", JSON.stringify(err, null, 2));
                                 } else {
@@ -165,7 +173,7 @@ io.on('connection',function(socket) {
                                 TableName:"Users",
                                 Key:{
                                     "UserID": to,
-                                    "RefeID": "Post_TestDemo01"
+                                    "RefeID": ReferenceID
                                 },
                                 UpdateExpression: "set Info.Liked = :newlist",
                                 ExpressionAttributeValues:{
