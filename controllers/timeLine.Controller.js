@@ -238,7 +238,9 @@ module.exports.loadMoreIndex = (req,res,id,ref) => {
                 return resolve(false);
             } else {
                 console.log("HERE => " + JSON.stringify(data.Items),null,'\t');
-                res.render("PostLoad",{posts : data.Items,moment : moment});
+                var post = shuffle(data.Items);
+                var lastItem = data.Items[data.Items.length-1];//Việt Thêm và thêm lastPostID & lastPostRef
+                res.render("PostLoad",{posts : post,moment : moment, lastPostID: lastItem.UserID, lastPostRef: lastItem.RefeID });
             }
         });
     })

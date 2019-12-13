@@ -38,7 +38,7 @@ function shuffle(array) {
 
     return array;
 }
-
+//Lỗi lúc thêm bài mới, ko add freind vào WhoCanSee
 module.exports.Index = (req, res) => {
     //console.log(req.UserID);
     var userID = "";
@@ -46,18 +46,27 @@ module.exports.Index = (req, res) => {
         if (err) res.sendStatus(403);
         else {
             console.log(data);
-
+            // var paramsAllPost = {
+            //     TableName: "Users",
+            //     KeyConditionExpression: "UserID = :post",
+            //     //ProjectionExpression: 'Info.WhoCanSee.UserID',
+            //     FilterExpression: "contains(Info.WhoCanSee, :id)",
+            //     ExpressionAttributeValues: {
+            //         ":post": "Post",
+            //         ":id": data.user.userID
+            //     },
+            //     Limit: 4
+            // }
             var paramsAllPost = {
                 TableName: "Users",
                 KeyConditionExpression: "UserID = :post",
-                //ProjectionExpression: 'Info.WhoCanSee.UserID',
-                FilterExpression: "contains(Info.WhoCanSee, :id)",
+                FilterExpression:"contains(Info.WhoCanSee, :id)",
                 ExpressionAttributeValues: {
                     ":post": "Post",
                     ":id": data.user.userID
                 },
-                Limit: 4
-            }
+                Limit:4
+            };
             userID = data.user.userID;
             docClient.query(paramsAllPost, function (err, data) {
                 if (err) {
@@ -68,8 +77,10 @@ module.exports.Index = (req, res) => {
                     // console.log(data.Items[0].Info.Comments.length);
                     console.log(data);
                     var post = shuffle(data.Items);
+                    var lastItem = data.Items[data.Items.length-1];//Việt Thêm và thêm lastPostID & lastPostRef
                     //  console.log("Random");
-                    res.render("index", ({ posts: post, userID: userID, moment: moment }));
+
+                    res.render("index", ({ posts: post, userID: userID, moment: moment, lastPostID: lastItem.UserID, lastPostRef: lastItem.RefeID }));
                 }
             });
         }
@@ -241,7 +252,7 @@ module.exports.PostAjax = (req, res) => {
             var paramsUserFriends = {
                 TableName: "Users",
                 KeyConditionExpression: "UserID = :userid and begins_with(RefeID, :reid)",
-                ProjectionExpression: 'UserID',
+                //ProjectionExpression: 'UserID',
                 ExpressionAttributeValues: {
                     ":reid": "Friend_",
                     ":userid": req.body.UserID
@@ -256,9 +267,10 @@ module.exports.PostAjax = (req, res) => {
                     var whoCanSee = [];
                     whoCanSee.push(req.body.UserID);
                     data.Items.forEach(function (Item) {
-                        whoCanSee.push(Item.UserID);
+                        //whoCanSee.push(Item.UserID);
+                        whoCanSee.push(Item.RefeID.split('_')[1]);
                     });
-                    console.log(whoCanSee);
+                    console.log("Who Can See ==>" + whoCanSee);
                     var paramPost = {
                         TableName: "Users",
                         Item: {

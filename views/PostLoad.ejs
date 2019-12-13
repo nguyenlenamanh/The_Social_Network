@@ -131,7 +131,7 @@
     </div>
 </div>
     <% if(post == posts[posts.length - 1]){ %>
-    <button id="btnLoadMore" userId="<%= post.UserID %>" ref="<%= post.RefeID %>" class="btn-view btn-load-more"
+    <button id="btnLoadMore" userId="<%=lastPostID%>" ref="<%=lastPostRef%>" class="btn-view btn-load-more"
             onclick="LoadMore()">
         Load More
     </button>
