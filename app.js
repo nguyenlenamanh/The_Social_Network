@@ -1,9 +1,12 @@
 var express = require("express");
 var app = express();
+
 var indexController = require('./controllers/index.controllers.js');
 var realtimeControllers = require('./controllers/realtime.controllers.js');
 var loginController = require('./controllers/login.controllers');
 var timeLineController = require('./controllers/timeLine.Controller');
+var chatController = require('./controllers/chat.controllers');
+
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
@@ -273,6 +276,36 @@ io.on('connection',function(socket) {
         });
     })
 
+    socket.on('get-into-room',function(roomid, token) {
+        jwt.verify(token,'secretkey',(err,data) => {
+            if(!err) {
+                // get userid + name from token
+                socket.userID = data.user.userID;
+                socket.name = data.user.name;
+
+                // user join into room by roomid
+                socket.join(roomid);
+
+                // if user currently in some room, then leave it.
+                if(socket.currentRoomID != null) {
+                    var currentRoomID = socket.currentRoomID;
+                    socket.leave(currentRoomID);
+                }
+
+                // set new roomid to socket for using later
+                socket.currentRoomID = roomid;
+            }
+            else 
+                socket.emit('err');
+        });
+    })
+
+    socket.on('receive-msg-to-room-from-client',function(msg) {
+        var by = socket.userID;
+        var roomid = socket.currentRoomID;
+        console.log(`${by} say: ${msg} into room ${roomid}`);
+    })
+
 })
 
 app.get('/',function(req,res) {
@@ -330,4 +363,9 @@ app.post('/reply',function(req,res){
  })
  app.post('/postAjax',function(req,res) {
     indexController.PostAjax(req,res);
+})
+
+// ===== nam anh =====
+app.get('/chat',function(req,res) {
+    chatController.chat(req,res);
 })
