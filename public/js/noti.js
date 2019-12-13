@@ -34,13 +34,23 @@ $(document).ready(function() {
         socket.emit('send-noti-message',from,to,"like",postID);
 
         var likebutton = document.getElementById(this.id);
+        var childStatus = likebutton.children[0];
+        var likeCout = likebutton.children[1];
         var text = likebutton.innerHTML.trim();
         if(text.includes('ti-heart-broken')) {
-            likebutton.innerHTML = '<i class="ti-heart"></i><ins>2.2k</ins>';
+            childStatus.classList.remove("ti-heart-broken");
+            childStatus.classList.add("ti-heart");
+            likebutton.setAttribute('style','color:green');
+            likeCout.innerHTML = (parseInt(likeCout.innerHTML)+1) + "";
+            console.log("Like");
             likebutton.setAttribute('data-original-title','like');
         }
         else {
-            likebutton.innerHTML = '<i class="ti-heart-broken" style="color: red;"></i><ins style="color: red;">2.2k</ins>';
+            likeCout.innerHTML = (parseInt(likeCout.innerHTML)-1) + "";
+            childStatus.classList.remove("ti-heart");
+            childStatus.classList.add("ti-heart-broken");
+            likebutton.setAttribute('style','color:red');
+            console.log("unlike");
             likebutton.setAttribute('data-original-title','unlike');
         }
     });

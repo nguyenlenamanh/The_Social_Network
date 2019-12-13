@@ -60,8 +60,7 @@ module.exports.timeLine = (req,res) => {
                     console.error("Unable to query. Error:", JSON.stringify(err, null, 2));
                 } else {
                     console.log(data);
-                    var post = shuffle(data.Items);
-                    res.render("timeLine",({posts: post,userID : userID,moment : moment}));
+                    res.render("timeLine",({posts: data.Items,userID : userID,moment : moment}));
                 }
             });
         }

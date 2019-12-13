@@ -3,19 +3,21 @@
 
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
+    <meta name="description" content=""/>
+    <meta name="keywords" content=""/>
     <title>Winku Social Network Toolkit</title>
     <link rel="icon" href="images/fav.png" type="image/png" sizes="16x16">
-
+    <script src="jquery.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script type="module" src="/path/to/js.cookie.mjs"></script>
+    <script src="js/noti.js"></script>
     <link rel="stylesheet" href="css/main.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/color.css">
     <link rel="stylesheet" href="css/responsive.css">
-    <script src="axios.js"></script>
-    <script src="js/post.js" id="handle2"></script>
+
 </head>
 <body>
 <!--<div class="se-pre-con"></div>-->
@@ -35,7 +37,7 @@
         </div>
         <div class="mh-head second">
             <form class="mh-form">
-                <input placeholder="search" />
+                <input placeholder="search"/>
                 <a href="#/" class="fa fa-search"></a>
             </form>
         </div>
@@ -175,32 +177,32 @@
                     <form method="post">
                         <div class="setting-row">
                             <span>Sub users</span>
-                            <input type="checkbox" id="switch6" />
+                            <input type="checkbox" id="switch6"/>
                             <label for="switch6" data-on-label="ON" data-off-label="OFF"></label>
                         </div>
                         <div class="setting-row">
                             <span>personal account</span>
-                            <input type="checkbox" id="switch7" />
+                            <input type="checkbox" id="switch7"/>
                             <label for="switch7" data-on-label="ON" data-off-label="OFF"></label>
                         </div>
                         <div class="setting-row">
                             <span>Business account</span>
-                            <input type="checkbox" id="switch8" />
+                            <input type="checkbox" id="switch8"/>
                             <label for="switch8" data-on-label="ON" data-off-label="OFF"></label>
                         </div>
                         <div class="setting-row">
                             <span>Show me online</span>
-                            <input type="checkbox" id="switch9" />
+                            <input type="checkbox" id="switch9"/>
                             <label for="switch9" data-on-label="ON" data-off-label="OFF"></label>
                         </div>
                         <div class="setting-row">
                             <span>Delete history</span>
-                            <input type="checkbox" id="switch10" />
+                            <input type="checkbox" id="switch10"/>
                             <label for="switch10" data-on-label="ON" data-off-label="OFF"></label>
                         </div>
                         <div class="setting-row">
                             <span>Expose author name</span>
-                            <input type="checkbox" id="switch11" />
+                            <input type="checkbox" id="switch11"/>
                             <label for="switch11" data-on-label="ON" data-off-label="OFF"></label>
                         </div>
                     </form>
@@ -503,13 +505,20 @@
                                         <h4 class="widget-title">Socials</h4>
                                         <ul class="socials">
                                             <li class="facebook">
-                                                <a title="" href="#"><i class="fa fa-facebook"></i> <span>facebook</span> <ins>45 likes</ins></a>
+                                                <a title="" href="#"><i class="fa fa-facebook"></i>
+                                                    <span>facebook</span>
+                                                    <ins>45 likes</ins>
+                                                </a>
                                             </li>
                                             <li class="twitter">
-                                                <a title="" href="#"><i class="fa fa-twitter"></i> <span>twitter</span><ins>25 likes</ins></a>
+                                                <a title="" href="#"><i class="fa fa-twitter"></i> <span>twitter</span>
+                                                    <ins>25 likes</ins>
+                                                </a>
                                             </li>
                                             <li class="google">
-                                                <a title="" href="#"><i class="fa fa-google"></i> <span>google</span><ins>35 likes</ins></a>
+                                                <a title="" href="#"><i class="fa fa-google"></i> <span>google</span>
+                                                    <ins>35 likes</ins>
+                                                </a>
                                             </li>
                                         </ul>
                                     </div>
@@ -630,219 +639,290 @@
                                 </aside>
                             </div><!-- sidebar -->
                             <div class="col-lg-6">
-								<div class="central-meta">
-									<div class="new-postbox">
-										<figure>
-											<img src="images/resources/admin2.jpg" alt="">
-										</figure>
-										<div class="newpst-input">
-											<form method="post" action="/post" enctype="multipart/form-data" id="frmPostNew">
-												<div id="showInfo"></div>
-												<input type="hidden" value="<%=userID%>" name="UserID" id="UserID">
-												<textarea rows="2" placeholder="write something" name="post_content" id="post_content"></textarea>
-												<div class="attachments">
-													<ul>
-														<li>
-															<i class="fa fa-music"></i>
-															<label class="fileContainer">
-																<input type="file" name="music" id="music">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-image"></i>
-															<label class="fileContainer">
-																<input type="file"  onchange="changeUrl(this,1)" name="picture" id="picture">
-															</label>
-														</li>
-														<li>
-															<i class="fa fa-video-camera"></i>
-															<label class="fileContainer">
-																<input type="file" onchange="changeUrl(this,2)" name="video" id="video">
-															</label>
-														</li>														
-														<li>
-																<button type="button" onclick="Post()">Post</button>
-															<!-- <button type="submit">Post</button> -->
-														</li>
-													</ul>
-												</div>
-											</form>
-										</div>
-									</div>
-								</div><!-- add post new box -->
-								<div class="loadMore" >	
-                                    <div id="allPost">						
-										<%posts.forEach(function(post){%>
-											<div id="<%post.UserID%>" class="central-meta item">
-													<div class="user-post">
-														<div class="friend-info">
-															<figure>
-																<img src="images/resources/friend-avatar10.jpg" alt="">
-															</figure>
-															<div class="friend-name">
-																<ins><a href="time-line.html" title="">Janice Griffith</a></ins>
-																<span>published: <%=moment(post.Info.PostTime).format('MMM-DD-YYYY')%></span>
-															</div>
-															<div class="post-meta">
-																<%if(post.Info.Type == "Photo"){%>
-																	<img src="<%=post.Info.URL%>" alt="">
-																<%}else if(post.Info.Type == "Video"){%>
-																	<video width="100%"  controls>
-																		<source src="<%=post.Info.URL%>" type="video/mp4">
-																		<source src="<%=post.Info.URL%>" type="video/ogg">
-																		Your browser does not support the video tag.
-																	  </video>
-																	<!-- <iframe src="<%=post.Info.URL%>" height="315" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe> -->
-																<%}else if(post.Info.Type == "Music"){%>
-																	<audio controls>
-																			<source src="<%=post.Info.URL%>" type="audio/ogg">
-																			<source src="<%=post.Info.URL%>" type="audio/mpeg">
-																		  Your browser does not support the audio element.
-																	</audio>
-																<%}%>
-																<div class="we-video-info">
-																	<ul>
-																		
-																		<li>
-																			<span class="comment" data-toggle="tooltip" title="Comments">
+                                <div class="central-meta">
+                                    <div class="new-postbox">
+                                        <figure>
+                                            <img src="images/resources/admin2.jpg" alt="">
+                                        </figure>
+                                        <div class="newpst-input">
+                                            <form method="post" action="/post" enctype="multipart/form-data"
+                                                  id="frmPostNew">
+                                                <div id="showInfo"></div>
+                                                <input type="hidden" value="<%= userID %>" name="UserID" id="UserID">
+                                                <textarea rows="2" placeholder="write something" name="post_content"
+                                                          id="post_content"></textarea>
+                                                <div class="attachments">
+                                                    <ul>
+                                                        <li>
+                                                            <i class="fa fa-music"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" name="music" id="music">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-image"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" onchange="changeUrl(this,1)"
+                                                                       name="picture" id="picture">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <i class="fa fa-video-camera"></i>
+                                                            <label class="fileContainer">
+                                                                <input type="file" onchange="changeUrl(this,2)"
+                                                                       name="video" id="video">
+                                                            </label>
+                                                        </li>
+                                                        <li>
+                                                            <button type="button" onclick="Post()">Post</button>
+                                                            <!-- <button type="submit">Post</button> -->
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div><!-- add post new box -->
+                                <div class="loadMore">
+                                    <div id="allPost">
+                                        <% posts.forEach(function(post){ %>
+                                            <div class="central-meta item">
+                                                <div class="user-post">
+                                                    <div class="friend-info">
+                                                        <figure>
+                                                            <img src="images/resources/friend-avatar10.jpg" alt="">
+                                                        </figure>
+                                                        <div class="friend-name">
+                                                            <ins><a href="time-line.html" title="">Janice Griffith</a>
+                                                            </ins>
+                                                            <span>published: <%= moment(post.Info.PostTime).format('MMM-DD-YYYY') %></span>
+                                                        </div>
+                                                        <div class="post-meta">
+                                                            <% if(post.Info.Type == "Photo"){ %>
+                                                                <img src="<%= post.Info.URL %>" alt="">
+                                                            <% }else if(post.Info.Type == "Video"){ %>
+                                                                <video width="100%" controls>
+                                                                    <source src="<%= post.Info.URL %>" type="video/mp4">
+                                                                    <source src="<%= post.Info.URL %>" type="video/ogg">
+                                                                    Your browser does not support the video tag.
+                                                                </video>
+                                                                <!-- <iframe src="<%= post.Info.URL %>" height="315" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen=""></iframe> -->
+                                                            <% }else if(post.Info.Type == "Music"){ %>
+                                                                <audio controls>
+                                                                    <source src="<%= post.Info.URL %>" type="audio/ogg">
+                                                                    <source src="<%= post.Info.URL %>"
+                                                                            type="audio/mpeg">
+                                                                    Your browser does not support the audio element.
+                                                                </audio>
+                                                            <% } %>
+                                                            <div class="we-video-info">
+                                                                <ul>
+
+                                                                    <li>
+																			<span class="comment" data-toggle="tooltip"
+                                                                                  title="Comments">
 																				<i class="fa fa-comments-o"></i>
 																				<ins>52</ins>
 																			</span>
-																		</li>
-																		<li>
-																			<span id="<%=post.Info.By + ';' + post.RefeID%>" class="like" data-toggle="tooltip" title="like" data-id="">
-																				<i class="ti-heart"></i>
-																				<ins>2.2k</ins>
-																			</span>
-																		</li>
-																		
-																		<li class="social-media">
-																			<div class="menu">
-																			  <div class="btn trigger"><i class="fa fa-share-alt"></i></div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-html5"></i></a></div>
-																			  </div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-facebook"></i></a></div>
-																			  </div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-google-plus"></i></a></div>
-																			  </div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-twitter"></i></a></div>
-																			  </div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-css3"></i></a></div>
-																			  </div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-instagram"></i></a>
-																				</div>
-																			  </div>
-																				<div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-dribbble"></i></a>
-																				</div>
-																			  </div>
-																			  <div class="rotater">
-																				<div class="btn btn-icon"><a href="#" title=""><i class="fa fa-pinterest"></i></a>
-																				</div>
-																			  </div>
-				
-																			</div>
-																		</li>
-																	</ul>
-																</div>
-																<div class="description">																
-																	<p>
-																			<%=post.Info.Description%>
-																	</p>
-																</div>
-															</div>
-														</div>
-														<div class="coment-area">
-															<ul class="we-comet" id="<%=post.RefeID%>">		
-																	<%var length = post.Info.Comments.length %>												
-																	<%for(var i = 0;i < length;i++){%>
-																		<li id="<%=post.Info.Comments[i].CommentID%>">
-																				<div class="comet-avatar">
-																					<img src="images/resources/comet-1.jpg" alt="">
-																				</div>
-																				<div class="we-comment">
-																					<div class="coment-head">
-																						<h5><a href="time-line.html" title="" id="un_<%=post.RefeID%><%=post.Info.Comments[i].CommentID%>"><%=post.Info.Comments[i].UserName%></a></h5>
-																						<span><%=moment(post.Info.Comments[i].PostDate).format( 'MMM-DD-YYYY')%></span>
-																						<a class="we-reply" title="Reply" style="color: #088dcd;cursor: pointer;"><i class="fa fa-reply reply_comment" id="<%=post.RefeID%>;<%=post.Info.Comments[i].CommentID%>"  onclick="Replay(this)"></i></a>
-																					</div>
-																					<p><%=post.Info.Comments[i].Content%>
-																						<!-- <i class="em em-smiley"></i> -->
-																					</p>
-																				</div>
-																				<%if(post.Info.Comments[i].Comments.length > 0){%>
-																					<ul id="ul_<%=post.Info.Comments[i].CommentID%>">
-																						<%var length2 = post.Info.Comments[i].Comments.length %>												
-																						<%for(var j = 0;j < length2;j++){%>
-																							<li id="<%=post.Info.Comments[i].Comments[j].CommentID%>">
-																								<div class="comet-avatar"><img src="images/resources/comet-1.jpg"></div>
-																								<div class="we-comment">
-																									<div class="coment-head">
-																										<h5><a href="time-line.html" id="un_<%=post.RefeID%><%=post.Info.Comments[i].Comments[j].CommentID%>"><%=post.Info.Comments[i].Comments[j].UserName%></a></h5>
-																										<span><%=moment(post.Info.Comments[i].Comments[j].PostDate).format( 'MMM-DD-YYYY')%></span>
-																										<!-- <a style="color: #088dcd;cursor: pointer;" class="we-reply" title="Reply"><i class="fa fa-reply reply_comment" id="NaN;CommentID__ozxsn8z8v"></i></a></div> -->
-																									<p><%=post.Info.Comments[i].Comments[j].Content%></p>
-																								</div>
-														
-																							</li>
+                                                                    </li>
+                                                                    <li>
+                                                                        <% if(post.Info.Liked.includes(userID)){ %>
+                                                                            <span id="<%= post.Info.By + ';' + post.RefeID %>"
+                                                                                  style="color: green;" class="like"
+                                                                                  data-toggle="tooltip" title="like"
+                                                                                  data-id="">
+                                                                            <i class="ti-heart"></i>
+                                                                            <ins><%= post.Info.Liked.length %></ins>
+                                                                        </span>
 
-																						<%}%>
-																					</ul>
-																				<%}else{%>
-																					<ul  id="ul_<%=post.Info.Comments[i].CommentID%>">
+                                                                        <% } else { %>
+                                                                            <span id="<%= post.Info.By + ';' + post.RefeID %>"
+                                                                                  style="color: red" class="like"
+                                                                                  data-toggle="tooltip" title="like"
+                                                                                  data-id="">
+                                                                            <i class="ti-heart-broken"></i>
+                                                                            <ins><%= post.Info.Liked.length %></ins>
+                                                                        </span>
+                                                                        <% } %>
 
-																					</ul>
-																				<%}%>
-                                                                        </li>
-																	<%}%>															
-																<li class="post-comment">
-																	<div class="comet-avatar">
-																		<img src="images/resources/comet-1.jpg" alt="">
-																	</div>
-																	<div class="post-comt-box">
-																		<form method="post" action="/comment">
-																			
-																			<input type="hidden" value="User Name Test" name="userName" id="userName<%=post.RefeID%>">
-																			<input type="hidden" value="<%=post.Info.WhoCanSee[0]%>" name="UserIDOwner" id="UserIDOwner<%=post.RefeID%>">
-																			<input type="hidden" value="<%=post.RefeID%>" name="postID" id="postID<%=post.RefeID%>">
-																			<input type="hidden" value="<%=userID%>" name="postID" id="UserIDOwnerComment<%=post.RefeID%>">									
-																			<textarea  onkeydown="PostComment(event,this)" placeholder="Post your comment" name="comment_content" id="comment_content<%=post.RefeID%>" class="input-content" data-id="<%=post.RefeID%>"></textarea>
-																			<div class="add-smiles">
-																				<span class="em em-expressionless" title="add icon"></span>
-																			</div>
-																			<div class="smiles-bunch">
-																				<i class="em em---1"></i>
-																				<i class="em em-smiley"></i>
-																				<i class="em em-anguished"></i>
-																				<i class="em em-laughing"></i>
-																				<i class="em em-angry"></i>
-																				<i class="em em-astonished"></i>
-																				<i class="em em-blush"></i>
-																				<i class="em em-disappointed"></i>
-																				<i class="em em-worried"></i>
-																				<i class="em em-kissing_heart"></i>
-																				<i class="em em-rage"></i>
-																				<i class="em em-stuck_out_tongue"></i>
-																			</div>
-																			<!-- <button class="post_comment" type="button" value="Send" class="btn btn-primary" data-id="<%=post.RefeID%>" style="bottom:inherit;background-color: blue;">Send</button> -->
-																		</form>	
-																	</div>
-																</li>
-															</ul>
-														</div>
-													</div>
-												</div> 
-                                        <%})%>
-                                    </div>	
-									<button id="btnLoadMore" class="btn-view btn-load-more" onclick="LoadMore(this.id,this.ref)">Load More</button>
-								</div>
-							</div><!-- centerl meta -->
+                                                                    </li>
+
+                                                                    <li class="social-media">
+                                                                        <div class="menu">
+                                                                            <div class="btn trigger"><i
+                                                                                        class="fa fa-share-alt"></i>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-html5"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-facebook"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-google-plus"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-twitter"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-css3"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-instagram"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-dribbble"></i></a>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="rotater">
+                                                                                <div class="btn btn-icon"><a href="#"
+                                                                                                             title=""><i
+                                                                                                class="fa fa-pinterest"></i></a>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="description">
+                                                                <p>
+                                                                    <%= post.Info.Description %>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="coment-area">
+                                                        <ul class="we-comet" id="<%= post.RefeID %>">
+                                                            <% var length = post.Info.Comments.length %>
+                                                            <% for(var i = 0;i < length;i++){ %>
+                                                                <li id="<%= post.Info.Comments[i].CommentID %>">
+                                                                    <div class="comet-avatar">
+                                                                        <img src="images/resources/comet-1.jpg" alt="">
+                                                                    </div>
+                                                                    <div class="we-comment">
+                                                                        <div class="coment-head">
+                                                                            <h5><a href="time-line.html" title=""
+                                                                                   id="un_<%= post.RefeID %><%= post.Info.Comments[i].CommentID %>"><%= post.Info.Comments[i].UserName %></a>
+                                                                            </h5>
+                                                                            <span><%= moment(post.Info.Comments[i].PostDate).format('MMM-DD-YYYY') %></span>
+                                                                            <a class="we-reply" title="Reply"
+                                                                               style="color: #088dcd;cursor: pointer;"><i
+                                                                                        class="fa fa-reply reply_comment"
+                                                                                        id="<%= post.RefeID %>;<%= post.Info.Comments[i].CommentID %>"
+                                                                                        onclick="Replay(this)"></i></a>
+                                                                        </div>
+                                                                        <p><%= post.Info.Comments[i].Content %>
+                                                                            <!-- <i class="em em-smiley"></i> -->
+                                                                        </p>
+                                                                    </div>
+                                                                    <% if(post.Info.Comments[i].Comments.length > 0){ %>
+                                                                        <ul id="ul_<%= post.Info.Comments[i].CommentID %>">
+                                                                            <% var length2 = post.Info.Comments[i].Comments.length %>
+                                                                            <% for(var j = 0;j < length2;j++){ %>
+                                                                                <li id="<%= post.Info.Comments[i].Comments[j].CommentID %>">
+                                                                                    <div class="comet-avatar"><img
+                                                                                                src="images/resources/comet-1.jpg">
+                                                                                    </div>
+                                                                                    <div class="we-comment">
+                                                                                        <div class="coment-head">
+                                                                                            <h5><a href="time-line.html"
+                                                                                                   id="un_<%= post.RefeID %><%= post.Info.Comments[i].Comments[j].CommentID %>"><%= post.Info.Comments[i].Comments[j].UserName %></a>
+                                                                                            </h5>
+                                                                                            <span><%= moment(post.Info.Comments[i].Comments[j].PostDate).format('MMM-DD-YYYY') %></span>
+                                                                                            <!-- <a style="color: #088dcd;cursor: pointer;" class="we-reply" title="Reply"><i class="fa fa-reply reply_comment" id="NaN;CommentID__ozxsn8z8v"></i></a></div> -->
+                                                                                            <p><%= post.Info.Comments[i].Comments[j].Content %></p>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </li>
+                                                                            <% } %>
+                                                                        </ul>
+                                                                    <% }else{ %>
+                                                                        <ul id="ul_<%= post.Info.Comments[i].CommentID %>">
+
+                                                                        </ul>
+                                                                    <% } %>
+                                                                </li>
+                                                            <% } %>
+                                                            <li class="post-comment">
+                                                                <div class="comet-avatar">
+                                                                    <img src="images/resources/comet-1.jpg" alt="">
+                                                                </div>
+                                                                <div class="post-comt-box">
+                                                                    <form method="post" action="/comment">
+
+                                                                        <input type="hidden" value="User Name Test"
+                                                                               name="userName"
+                                                                               id="userName<%= post.RefeID %>">
+                                                                        <input type="hidden"
+                                                                               value="<%= post.Info.WhoCanSee[0] %>"
+                                                                               name="UserIDOwner"
+                                                                               id="UserIDOwner<%= post.RefeID %>">
+                                                                        <input type="hidden" value="<%= post.RefeID %>"
+                                                                               name="postID"
+                                                                               id="postID<%= post.RefeID %>">
+                                                                        <input type="hidden" value="<%= userID %>"
+                                                                               name="postID"
+                                                                               id="UserIDOwnerComment<%= post.RefeID %>">
+                                                                        <textarea onkeydown="PostComment(event,this)"
+                                                                                  placeholder="Post your comment"
+                                                                                  name="comment_content"
+                                                                                  id="comment_content<%= post.RefeID %>"
+                                                                                  class="input-content"
+                                                                                  data-id="<%= post.RefeID %>"></textarea>
+                                                                        <div class="add-smiles">
+                                                                        <span class="em em-expressionless"
+                                                                              title="add icon"></span>
+                                                                        </div>
+                                                                        <div class="smiles-bunch">
+                                                                            <i class="em em---1"></i>
+                                                                            <i class="em em-smiley"></i>
+                                                                            <i class="em em-anguished"></i>
+                                                                            <i class="em em-laughing"></i>
+                                                                            <i class="em em-angry"></i>
+                                                                            <i class="em em-astonished"></i>
+                                                                            <i class="em em-blush"></i>
+                                                                            <i class="em em-disappointed"></i>
+                                                                            <i class="em em-worried"></i>
+                                                                            <i class="em em-kissing_heart"></i>
+                                                                            <i class="em em-rage"></i>
+                                                                            <i class="em em-stuck_out_tongue"></i>
+                                                                        </div>
+                                                                        <!-- <button class="post_comment" type="button" value="Send" class="btn btn-primary" data-id="<%= post.RefeID %>" style="bottom:inherit;background-color: blue;">Send</button> -->
+                                                                    </form>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                    <button id="btnLoadMore" class="btn-view btn-load-more"
+                                            onclick="LoadMore(this.id,this.ref)">Load More
+                                    </button>
+                                </div>
+                            </div><!-- centerl meta -->
                             <div class="col-lg-3">
                                 <aside class="sidebar static">
                                     <div class="widget friend-list stick-widget">
@@ -856,7 +936,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">bucky barnes</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4136282f352433322e2d25243301262c20282d6f222e2c">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="4136282f352433322e2d25243301262c20282d6f222e2c">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -866,7 +948,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">Sarah Loren</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3a585b48545f497a5d575b535614595557">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="3a585b48545f497a5d575b535614595557">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -876,7 +960,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">jason borne</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="127873617d7c7052757f737b7e3c717d7f">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="127873617d7c7052757f737b7e3c717d7f">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -886,7 +972,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">Cameron diaz</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="620803110d0c0022050f030b0e4c010d0f">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="620803110d0c0022050f030b0e4c010d0f">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -897,7 +985,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">daniel warber</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0963687a66676b496e64686065276a6664">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="0963687a66676b496e64686065276a6664">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -908,7 +998,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">andrew</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5b313a283435391b3c363a323775383436">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="5b313a283435391b3c363a323775383436">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -919,7 +1011,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">amy watson</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="472d263428292507202a262e2b6924282a">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="472d263428292507202a262e2b6924282a">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -930,7 +1024,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">daniel warber</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7a101b091514183a1d171b131654191517">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="7a101b091514183a1d171b131654191517">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                             <li>
@@ -941,7 +1037,9 @@
                                                 </figure>
                                                 <div class="friendz-meta">
                                                     <a href="timeLine">Sarah Loren</a>
-                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="7c1e1d0e12190f3c1b111d1510521f1311">[email&#160;protected]</a></i>
+                                                    <i><a href="https://wpkixx.com/cdn-cgi/l/email-protection"
+                                                          class="__cf_email__"
+                                                          data-cfemail="7c1e1d0e12190f3c1b111d1510521f1311">[email&#160;protected]</a></i>
                                                 </div>
                                             </li>
                                         </ul>
@@ -957,30 +1055,39 @@
                                             <div class="chat-list">
                                                 <ul>
                                                     <li class="me">
-                                                        <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>
+                                                        <div class="chat-thumb"><img
+                                                                    src="images/resources/chatlist1.jpg" alt=""></div>
                                                         <div class="notification-event">
 															<span class="chat-message-item">
 																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks
 															</span>
-                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>
+                                                            <span class="notification-date"><time
+                                                                        datetime="2004-07-24T18:18"
+                                                                        class="entry-date updated">Yesterday at 8:10pm</time></span>
                                                         </div>
                                                     </li>
                                                     <li class="you">
-                                                        <div class="chat-thumb"><img src="images/resources/chatlist2.jpg" alt=""></div>
+                                                        <div class="chat-thumb"><img
+                                                                    src="images/resources/chatlist2.jpg" alt=""></div>
                                                         <div class="notification-event">
 															<span class="chat-message-item">
 																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks
 															</span>
-                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>
+                                                            <span class="notification-date"><time
+                                                                        datetime="2004-07-24T18:18"
+                                                                        class="entry-date updated">Yesterday at 8:10pm</time></span>
                                                         </div>
                                                     </li>
                                                     <li class="me">
-                                                        <div class="chat-thumb"><img src="images/resources/chatlist1.jpg" alt=""></div>
+                                                        <div class="chat-thumb"><img
+                                                                    src="images/resources/chatlist1.jpg" alt=""></div>
                                                         <div class="notification-event">
 															<span class="chat-message-item">
 																Hi James! Please remember to buy the food for tomorrow! I’m gonna be handling the gifts and Jake’s gonna get the drinks
 															</span>
-                                                            <span class="notification-date"><time datetime="2004-07-24T18:18" class="entry-date updated">Yesterday at 8:10pm</time></span>
+                                                            <span class="notification-date"><time
+                                                                        datetime="2004-07-24T18:18"
+                                                                        class="entry-date updated">Yesterday at 8:10pm</time></span>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -1027,7 +1134,8 @@
                                 <a href="index-2.html" title=""><img src="images/logo.png" alt=""></a>
                             </div>
                             <p>
-                                The trio took this simple idea and built it into the world’s leading carpooling platform.
+                                The trio took this simple idea and built it into the world’s leading carpooling
+                                platform.
                             </p>
                         </div>
                         <ul class="location">
@@ -1046,11 +1154,16 @@
                     <div class="widget">
                         <div class="widget-title"><h4>follow</h4></div>
                         <ul class="list-style">
-                            <li><i class="fa fa-facebook-square"></i> <a href="https://web.facebook.com/shopcircut/" title="">facebook</a></li>
-                            <li><i class="fa fa-twitter-square"></i><a href="https://twitter.com/login?lang=en" title="">twitter</a></li>
-                            <li><i class="fa fa-instagram"></i><a href="https://www.instagram.com/?hl=en" title="">instagram</a></li>
-                            <li><i class="fa fa-google-plus-square"></i> <a href="https://plus.google.com/discover" title="">Google+</a></li>
-                            <li><i class="fa fa-pinterest-square"></i> <a href="https://www.pinterest.com/" title="">Pintrest</a></li>
+                            <li><i class="fa fa-facebook-square"></i> <a href="https://web.facebook.com/shopcircut/"
+                                                                         title="">facebook</a></li>
+                            <li><i class="fa fa-twitter-square"></i><a href="https://twitter.com/login?lang=en"
+                                                                       title="">twitter</a></li>
+                            <li><i class="fa fa-instagram"></i><a href="https://www.instagram.com/?hl=en" title="">instagram</a>
+                            </li>
+                            <li><i class="fa fa-google-plus-square"></i> <a href="https://plus.google.com/discover"
+                                                                            title="">Google+</a></li>
+                            <li><i class="fa fa-pinterest-square"></i> <a href="https://www.pinterest.com/" title="">Pintrest</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -1082,9 +1195,12 @@
                     <div class="widget">
                         <div class="widget-title"><h4>download apps</h4></div>
                         <ul class="colla-apps">
-                            <li><a href="https://play.google.com/store?hl=en" title=""><i class="fa fa-android"></i>android</a></li>
-                            <li><a href="https://www.apple.com/lae/ios/app-store/" title=""><i class="ti-apple"></i>iPhone</a></li>
-                            <li><a href="https://www.microsoft.com/store/apps" title=""><i class="fa fa-windows"></i>Windows</a></li>
+                            <li><a href="https://play.google.com/store?hl=en" title=""><i class="fa fa-android"></i>android</a>
+                            </li>
+                            <li><a href="https://www.apple.com/lae/ios/app-store/" title=""><i class="ti-apple"></i>iPhone</a>
+                            </li>
+                            <li><a href="https://www.microsoft.com/store/apps" title=""><i class="fa fa-windows"></i>Windows</a>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -1095,7 +1211,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <span class="copyright"><a target="_blank" href="https://www.templateshub.net">Templates Hub</a></span>
+                    <span class="copyright"><a target="_blank"
+                                               href="https://www.templateshub.net">Templates Hub</a></span>
                     <i><img src="images/credit-cards.png" alt=""></i>
                 </div>
             </div>
@@ -1112,22 +1229,22 @@
         </div>
         <div class="setting-row">
             <span>Notifications</span>
-            <input type="checkbox" id="switch22" />
+            <input type="checkbox" id="switch22"/>
             <label for="switch22" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>Notification sound</span>
-            <input type="checkbox" id="switch33" />
+            <input type="checkbox" id="switch33"/>
             <label for="switch33" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>My profile</span>
-            <input type="checkbox" id="switch44" />
+            <input type="checkbox" id="switch44"/>
             <label for="switch44" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>Show profile</span>
-            <input type="checkbox" id="switch55" />
+            <input type="checkbox" id="switch55"/>
             <label for="switch55" data-on-label="ON" data-off-label="OFF"></label>
         </div>
     </form>
@@ -1135,60 +1252,60 @@
     <form method="post">
         <div class="setting-row">
             <span>Sub users</span>
-            <input type="checkbox" id="switch66" />
+            <input type="checkbox" id="switch66"/>
             <label for="switch66" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>personal account</span>
-            <input type="checkbox" id="switch77" />
+            <input type="checkbox" id="switch77"/>
             <label for="switch77" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>Business account</span>
-            <input type="checkbox" id="switch88" />
+            <input type="checkbox" id="switch88"/>
             <label for="switch88" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>Show me online</span>
-            <input type="checkbox" id="switch99" />
+            <input type="checkbox" id="switch99"/>
             <label for="switch99" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>Delete history</span>
-            <input type="checkbox" id="switch101" />
+            <input type="checkbox" id="switch101"/>
             <label for="switch101" data-on-label="ON" data-off-label="OFF"></label>
         </div>
         <div class="setting-row">
             <span>Expose author name</span>
-            <input type="checkbox" id="switch111" />
+            <input type="checkbox" id="switch111"/>
             <label for="switch111" data-on-label="ON" data-off-label="OFF"></label>
         </div>
     </form>
 </div><!-- side panel -->
 
-<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/main.min.js"></script>
+<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="js/main.min.js"></script>
 <script src="js/script.js"></script>
 
 <script>
-    function changeUrl(input,type) {
+    function changeUrl(input, type) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             var form = document.querySelector('#showInfo');
             form.innerHTML = "";
-            reader.onload = function(e) {
-                if(type==1){
+            reader.onload = function (e) {
+                if (type == 1) {
                     var img = document.createElement('img');
                     img.width = 200;
                     img.src = e.target.result;
                     form.appendChild(img);
 
-                }
-                else{
+                } else {
                     var video = document.createElement('video');
-                    video.setAttribute("width","100%");
+                    video.setAttribute("width", "100%");
                     video.src = e.target.result;
                     video.load();
-                    video.setAttribute("controls","controls")
+                    video.setAttribute("controls", "controls")
                     form.appendChild(video);
                 }
 
