@@ -4,7 +4,7 @@
   "description": "social network",
   "main": "app.js",
   "dependencies": {
-    "aws-sdk": "^2.580.0",
+    "aws-sdk": "^2.814.0",
     "body-parser": "latest",
     "cookie-parser": "^1.4.4",
     "ejs": "^3.0.1",
